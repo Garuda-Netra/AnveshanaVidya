@@ -1,0 +1,250 @@
+[
+  {
+    "command": "strings",
+    "category": "Binary Analysis",
+    "description": "Extracts printable ASCII and Unicode strings from binary files, memory dumps, or disk images. Essential for finding readable text in compiled executables, memory artifacts, or raw data.",
+    "usage": "strings <file> [options]",
+    "forensicUse": "Investigators use strings to find embedded URLs, IP addresses, file paths, error messages, hardcoded credentials, or encryption keys in malware samples and memory dumps.",
+    "simulatedOutput": "Found 142 printable strings in memory dump:\n  → http://malicious-c2-server.com/payload\n  → C:\\Users\\Admin\\Documents\\credentials.txt\n  → API_KEY_3a8f9c2d1e7b4f6a\n  → SELECT * FROM users WHERE admin=1\n  → 42 additional strings matching pattern"
+  },
+  {
+    "command": "volatility",
+    "category": "Memory Analysis",
+    "description": "Industry-standard memory forensics framework for analyzing RAM dumps. Extracts running processes, network connections, registry hives, command history, and malware artifacts from memory images.",
+    "usage": "volatility -f <memory.raw> --profile=<OS> <plugin>",
+    "forensicUse": "Critical for incident response and malware analysis. Reveals processes hidden by rootkits, identifies code injection, recovers encryption keys, and reconstructs attacker activity from volatile memory.",
+    "simulatedOutput": "Memory Analysis Results:\n  Processes detected: 47 active, 3 hidden\n  → explorer.exe (PID 2847) - Legitimate\n  → svchost.exe (PID 4921) - **SUSPICIOUS** (Code injection detected)\n  → chrome.exe (PID 1234) - Legitimate\n  Network Connections: 12 active, 2 to suspicious IPs\n  → 192.168.1.105:443 → 203.0.113.87:4444 [MALICIOUS C2]"
+  },
+  {
+    "command": "autopsy",
+    "category": "Suite/Platform",
+    "description": "Open-source digital forensics platform with GUI for analyzing disk images, file systems, and mobile devices. Provides automated analysis, timeline generation, and comprehensive reporting.",
+    "usage": "Launch GUI → Create Case → Add Data Source → Run Ingest",
+    "forensicUse": "Law enforcement and corporate investigators use Autopsy for full-scale investigations. Automates artifact extraction, keyword searching, file carving, and timeline analysis for efficient case management.",
+    "simulatedOutput": "Case Analysis Complete:\n  Case: 'drive_image.dd' | Size: 500GB\n  Files analyzed: 1,247,583\n  Deleted files recovered: 8,942\n  Keyword hits: 234 matches for 'confidential'\n  Timeline events: 15,847 across 30-day window\n  Artifacts: 847 registry keys, 234 prefetch files, 92 browser history entries\n  Evidence ready for export and reporting."
+  },
+  {
+    "command": "bulk_extractor",
+    "category": "Data Carving",
+    "description": "High-speed scanner that extracts structured information (emails, URLs, credit cards, phone numbers) from disk images without parsing file systems. Ignores file system structure for deep carving.",
+    "usage": "bulk_extractor -o <output_dir> <image>",
+    "forensicUse": "Ideal for finding PII, financial data, and communication artifacts in unallocated space, slack space, or damaged file systems. Processes terabytes of data quickly.",
+    "simulatedOutput": "Data Extraction Complete:\n  Processed: 750GB in 38 minutes\n  Email addresses: 2,847 unique (email.txt)\n  URLs: 15,234 (url.txt)\n  Credit cards: 93 valid PANs (ccn.txt)\n  Phone numbers: 1,234 (telephone.txt)\n  Histograms generated for frequency analysis\n  Top domain: suspicious-marketplace.onion (247 references)"
+  },
+  {
+    "command": "sleuthkit",
+    "category": "File System Analysis",
+    "description": "Collection of command-line tools (fls, icat, istat) for low-level file system forensics. Examines inodes, recovers deleted files, and analyzes disk structures on NTFS, FAT, ext4, and more.",
+    "usage": "fls -r <image> | icat <image> <inode>",
+    "forensicUse": "Forensic examiners use Sleuth Kit for manual file system analysis, recovering deleted files by inode, examining metadata, and creating detailed file system timelines.",
+    "simulatedOutput": "File System Analysis:\n  Partition table: MBR with 3 partitions\n  File system: NTFS, 500GB capacity, 67% used\n  Deleted files: 1,847 recoverable\n  → Inode 128-144-3: 'confidential_memo.docx' (deleted 3 days ago)\n  → Content NOT overwritten - full recovery possible\n  MFT entry intact | Metadata preserved | File extracted successfully"
+  },
+  {
+    "command": "hashcalc",
+    "category": "Hashing",
+    "description": "Calculates cryptographic hashes (MD5, SHA-1, SHA-256, SHA-512) for files to ensure evidence integrity and verify file authenticity. Essential for chain of custody.",
+    "usage": "hashcalc <file> [algorithm]",
+    "forensicUse": "Every forensic investigation requires hash verification. Ensures evidence hasn't been tampered with, validates forensic images, and creates digital fingerprints for comparison.",
+    "simulatedOutput": "Hash Calculation Results:\n  File: 'evidence_image.E01' | Size: 247GB\n  MD5:    9f86d081884c7d659a2feaa0c55ad015\n  SHA-1:  a3c2f1e8b7d9c4f6a8e1b2d3c5f7a9e2b4d6c8f1\n  SHA-256: 2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae\n  ✓ Hash verified against acquisition record\n  Evidence integrity: CONFIRMED"
+  },
+  {
+    "command": "recover",
+    "category": "File Recovery",
+    "description": "Simulates file recovery from deleted partitions, formatted drives, or corrupted file systems. Scans for file signatures and reconstructs file headers for data restoration.",
+    "usage": "recover <source> <destination>",
+    "forensicUse": "Critical for recovering evidence from intentionally deleted files, formatted drives, or damaged storage media. Uses file carving techniques to reassemble fragmented files.",
+    "simulatedOutput": "File Recovery Operation:\n  Scanning deleted file entries...\n  Found: 1,847 deleted files\n  Recoverable: 1,623 (88% recovery rate)\n  Successfully recovered:\n    → evidence.log (23KB) - timestamps intact\n    → deleted_email.pst (247MB) - 98% intact\n    → financial_records.xlsx (1.2MB) - fully recovered\n  Files saved to recovery directory with forensic metadata"
+  },
+  {
+    "command": "timeline",
+    "category": "Timeline Analysis",
+    "description": "Creates forensic timelines by aggregating file system timestamps (MACB: Modified, Accessed, Changed, Birth), registry entries, event logs, and application artifacts.",
+    "usage": "timeline <image> --start <date> --end <date>",
+    "forensicUse": "Timelines reconstruct attacker activity by correlating events across multiple sources. Reveals sequence of actions during breaches, establishes alibis, and identifies suspicious patterns.",
+    "simulatedOutput": "Forensic Timeline Generated:\n  Time range: 2024-11-28 12:00:00 to 14:30:00\n  Total events: 3,847\n  Key events:\n    12:15:47 - USB device connected (SanDisk 128GB)\n    12:18:23 - File accessed: C:\\Confidential\\database.db\n    12:21:05 - File copied to E:\\ (USB drive)\n    12:24:31 - Browser opened: private browsing mode\n    12:47:18 - USB device disconnected\n  Suspicious activity window: 12:15 - 12:47 (32 minutes)"
+  },
+  {
+    "command": "whoami",
+    "category": "System",
+    "description": "Displays the current forensic investigator identity and system context. Shows active user, privileges, and forensic environment details.",
+    "usage": "whoami",
+    "forensicUse": "Verifies forensic workstation identity and ensures analysis is performed under correct user context with appropriate privileges for evidence handling.",
+    "simulatedOutput": "Forensic Identity:\n  User: root@forensec\n  Role: Senior Digital Forensic Examiner\n  Privileges: Administrator (Evidence Access Granted)\n  Workstation: FORENSIC-LAB-07\n  Active Case: #2024-11-28-001\n  Certification: EnCE, GCFE, CHFI\n  Evidence Integrity: Chain of custody active"
+  },
+  {
+    "command": "wireshark",
+    "category": "Network Forensics",
+    "description": "Captures and analyzes network packets for investigating network-based attacks, data exfiltration, malware C2 communications, and protocol anomalies.",
+    "usage": "wireshark -r <capture.pcap> -Y <filter>",
+    "forensicUse": "Network investigators use Wireshark to decrypt traffic, follow TCP streams, extract files from packets, identify malicious IPs, and reconstruct network-based attacks.",
+    "simulatedOutput": "Packet Analysis Results:\n  Capture file: network_traffic.pcap | Duration: 4 hours\n  Packets captured: 1,247,583\n  Protocols: HTTP (34%), TLS (52%), DNS (8%), Other (6%)\n  Suspicious findings:\n    → 234 DNS queries to .onion domains (Tor)\n    → Outbound connection to 203.0.113.87:4444 (C2 server)\n    → HTTP POST with 14.7GB payload (data exfiltration)\n  Files extracted: 47 executables, 234 documents"
+  },
+  {
+    "command": "ftk",
+    "category": "Acquisition",
+    "description": "FTK Imager creates forensically sound disk images in E01 or DD format with built-in hash verification. Industry standard for evidence acquisition.",
+    "usage": "ftkimager <source> <destination> [E01|DD]",
+    "forensicUse": "First step in any investigation. Creates bit-for-bit copies of storage media with cryptographic hashes to ensure evidence authenticity and allow non-destructive analysis.",
+    "simulatedOutput": "Disk Imaging Complete:\n  Source: \\\\.\\PhysicalDrive1 (500GB HDD)\n  Destination: evidence_drive.E01\n  Format: Expert Witness E01 (compressed)\n  Compression: 35% (325GB final size)\n  MD5: 5d41402abc4b2a76b9719d911017c592\n  SHA-1: aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d\n  Verification: PASS ✓\n  Time elapsed: 2h 47m | Evidence preserved"
+  },
+  {
+    "command": "netstat",
+    "category": "Network Analysis",
+    "description": "Displays active network connections, listening ports, routing tables, and network interface statistics. Essential for live system analysis.",
+    "usage": "netstat -anob",
+    "forensicUse": "Identifies active malware connections, backdoors, and suspicious network activity on live systems. Shows which processes are communicating over the network.",
+    "simulatedOutput": "Active Network Connections:\n  Protocol  Local Address      Foreign Address      State      PID\n  TCP       192.168.1.105:443  203.0.113.87:4444   ESTABLISHED 4921 (svchost.exe) **SUSPICIOUS**\n  TCP       192.168.1.105:80   10.0.0.5:51234      ESTABLISHED 1234 (chrome.exe)\n  TCP       0.0.0.0:445        0.0.0.0:0           LISTENING   4\n  UDP       0.0.0.0:53         *:*                             1824 (dns.exe)\n  Warning: Connection to known C2 infrastructure detected!"
+  },
+  {
+    "command": "registry",
+    "category": "OS Forensics",
+    "description": "Parses Windows Registry hives to extract user activity, USB devices, recently accessed files, network history, and malware persistence mechanisms.",
+    "usage": "registry <hive> --key <path>",
+    "forensicUse": "Registry analysis reveals user behavior, connected devices, installed software, auto-start locations, and timeline artifacts critical for Windows investigations.",
+    "simulatedOutput": "Registry Analysis:\n  Hive: NTUSER.DAT (User profile)\n  Recent Documents: 234 files accessed\n    → C:\\Confidential\\project_files\\secret.docx (Last: 2024-11-28 12:15)\n  USB History: 5 devices connected\n    → SanDisk Extreme 128GB (Last: 2024-11-28 12:15:47)\n  Auto-start Keys: 3 suspicious entries\n    → HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\WindowsUpdate\n      Value: C:\\Users\\Admin\\AppData\\malware.exe"
+  },
+  {
+    "command": "prefetch",
+    "category": "OS Forensics",
+    "description": "Analyzes Windows Prefetch files to determine program execution history, including execution count and last run times. Proves program execution.",
+    "usage": "prefetch <.pf file>",
+    "forensicUse": "Prefetch analysis proves a specific executable ran on a system, when it ran, and how many times. Critical for establishing malware execution or user activity.",
+    "simulatedOutput": "Prefetch Analysis:\n  File: MALWARE.EXE-A3D2F1C8.pf\n  Program: C:\\Users\\Admin\\AppData\\Temp\\malware.exe\n  First executed: 2024-11-25 18:34:12\n  Last executed: 2024-11-28 12:18:45\n  Execution count: 47 times\n  Files accessed: 234 DLLs and data files\n  **Evidence: Malware repeatedly executed over 3-day period**"
+  },
+  {
+    "command": "evtx",
+    "category": "OS Forensics",
+    "description": "Parses Windows Event Logs (EVTX format) for security events, logons, process creation, service installation, and system changes.",
+    "usage": "evtx <Security.evtx> --filter <event_id>",
+    "forensicUse": "Event logs document user logons, failed authentication attempts, privilege escalation, and administrative actions. Critical for incident response timelines.",
+    "simulatedOutput": "Event Log Analysis:\n  Log: Security.evtx | Events: 15,847\n  Event ID 4624 (Logon): 234 successful logons\n    → User 'admin' logged on at 2024-11-28 02:34:17 (suspicious time)\n  Event ID 4688 (Process Creation):\n    → powershell.exe with encoded command at 02:35:42\n  Event ID 7045 (Service Install):\n    → 'WindowsUpdateService' created at 02:36:18 (persistence)\n  **Timeline suggests automated attack at 2:34 AM**"
+  },
+  {
+    "command": "exif",
+    "category": "Metadata Analysis",
+    "description": "Extracts EXIF metadata from images and videos including GPS coordinates, camera model, timestamps, and editing software. Proves authenticity and location.",
+    "usage": "exif <image.jpg>",
+    "forensicUse": "EXIF data establishes when and where photos were taken, proves device ownership, detects photo manipulation, and provides geolocation evidence.",
+    "simulatedOutput": "EXIF Metadata Extraction:\n  File: IMG_2847.jpg | Size: 4.2MB\n  Camera: iPhone 13 Pro | Serial: DMQL2847KF\n  Date Taken: 2024-11-28 14:32:18\n  GPS Coordinates: 40.7589° N, 73.9851° W (New York, NY)\n  Software: Adobe Photoshop 2024 (edited)\n  **Location places suspect at crime scene during incident**\n  **Editing timestamp shows photo modified after event**"
+  },
+  {
+    "command": "plaso",
+    "category": "Timeline Analysis",
+    "description": "Super timeline tool that extracts timestamps from file systems, registry, logs, and browser history. Creates comprehensive forensic timelines.",
+    "usage": "log2timeline.py <plaso.db> <evidence>",
+    "forensicUse": "Plaso aggregates timestamps from hundreds of sources into unified timelines, revealing chronological sequence of events across entire systems.",
+    "simulatedOutput": "Super Timeline Generation:\n  Processing: 500GB disk image\n  Sources parsed: File system (NTFS), Registry, Event logs, Browser cache\n  Total events: 2,847,583 timestamps\n  Timeline range: 2024-01-01 to 2024-11-28\n  Key activity clusters:\n    → 2024-11-28 12:00-14:00: 847 events (data exfiltration window)\n    → USB device usage, file access, network connections correlated\n  Timeline database ready for analysis with psort.py"
+  },
+  {
+    "command": "yara",
+    "category": "Malware Analysis",
+    "description": "Pattern matching tool using YARA rules to identify malware signatures, malicious code patterns, and indicators of compromise in files or memory.",
+    "usage": "yara <rules.yar> <target>",
+    "forensicUse": "Malware hunters use YARA to scan systems for known malware families, detect variants, and identify suspicious code patterns based on behavioral signatures.",
+    "simulatedOutput": "YARA Scan Results:\n  Rules: malware_signatures.yar (1,247 rules)\n  Target: C:\\Users\\Admin\\AppData\\suspicious.exe\n  Matches: 3 rules triggered\n    ✓ Rule: Cobalt_Strike_Beacon [High Confidence]\n    ✓ Rule: Code_Injection_Technique [Medium]\n    ✓ Rule: Network_C2_Communication [High]\n  File identified as: Cobalt Strike beacon variant\n  Threat level: CRITICAL | Immediate containment required"
+  },
+  {
+    "command": "memdump",
+    "category": "Memory Analysis",
+    "description": "Creates memory dump of running processes or full system RAM for forensic analysis. Captures volatile data before shutdown.",
+    "usage": "memdump <output.dmp>",
+    "forensicUse": "First responders acquire memory dumps to preserve volatile evidence like encryption keys, running malware, network connections, and passwords before system shutdown.",
+    "simulatedOutput": "Memory Acquisition:\n  System RAM: 16GB total\n  Acquiring physical memory...\n  Progress: ████████████████████ 100% (16.0GB/16.0GB)\n  Output: memory_dump.raw (16GB)\n  MD5: c4ca4238a0b923820dcc509a6f75849b\n  Time: 4m 32s\n  Volatile data preserved:\n    → 47 running processes captured\n    → 12 active network connections\n    → Encryption keys potentially recoverable"
+  },
+  {
+    "command": "carve",
+    "category": "Data Carving",
+    "description": "File carving technique that recovers deleted files by identifying file signatures (headers/footers) in unallocated space without file system metadata.",
+    "usage": "carve <image> --type <jpg|pdf|docx|exe>",
+    "forensicUse": "Recovers files from formatted drives, deleted partitions, or fragmented storage by scanning raw data for file signatures. Bypasses file system damage.",
+    "simulatedOutput": "File Carving Operation:\n  Scanning unallocated space: 150GB\n  File signatures detected:\n    → 847 JPEG images (jpg/jfif headers)\n    → 234 PDF documents\n    → 45 Microsoft Office files (docx/xlsx)\n    → 12 Executable files (PE/MZ headers)\n  Successfully carved: 1,023 files (87% intact)\n  Extracted to: carved_files/\n  Notable: deleted_evidence.pdf (fully recovered, 2.3MB)"
+  },
+  {
+    "command": "help",
+    "category": "System",
+    "description": "Displays comprehensive list of all available forensic commands with descriptions and categories.",
+    "usage": "help [command]",
+    "forensicUse": "Reference guide for forensic investigators to discover available tools and understand their applications in digital investigations.",
+    "simulatedOutput": null
+  },
+  {
+    "command": "clear",
+    "category": "System",
+    "description": "Clears terminal screen and command history for clean workspace.",
+    "usage": "clear",
+    "forensicUse": "Maintains organized terminal workspace during investigations by removing previous command output.",
+    "simulatedOutput": null
+  },
+  {
+    "command": "explain",
+    "category": "Educational",
+    "description": "Provides in-depth forensic context and real-world investigation usage for specified command.",
+    "usage": "explain <command>",
+    "forensicUse": "Educational tool that teaches investigators how commands are applied in actual criminal, corporate, and incident response investigations.",
+    "simulatedOutput": null
+  },
+  {
+    "command": "quiz",
+    "category": "Educational",
+    "description": "Presents forensic multiple-choice questions to test knowledge of digital investigation techniques and procedures.",
+    "usage": "quiz",
+    "forensicUse": "Training tool for forensic students and investigators to validate understanding of forensic methodologies and best practices.",
+    "simulatedOutput": null
+  },
+  {
+    "command": "case",
+    "category": "Educational",
+    "description": "Loads random forensic case study from database showing real-world investigation scenarios with evidence, workflow, and outcomes.",
+    "usage": "case [id]",
+    "forensicUse": "Educational resource demonstrating complete investigation workflows from evidence collection to legal outcomes in various case types.",
+    "simulatedOutput": null
+  },
+  {
+    "command": "tcpdump",
+    "category": "Network Forensics",
+    "description": "Command-line packet analyzer for capturing and analyzing network traffic in real-time or from capture files.",
+    "usage": "tcpdump -i <interface> -w <output.pcap>",
+    "forensicUse": "Live network traffic capture during incident response. Filters packets by IP, port, or protocol for targeted analysis of network-based attacks.",
+    "simulatedOutput": "Packet Capture:\n  Interface: eth0\n  Filter: tcp port 443 or tcp port 80\n  Packets captured: 15,847 (4 minutes)\n  Top talkers:\n    → 192.168.1.105 → 203.0.113.87:4444 (2,847 packets) **SUSPICIOUS**\n    → 192.168.1.105 → 172.217.14.206:443 (8,234 packets)\n  Suspicious traffic: Encrypted C2 beaconing detected\n  Capture saved: suspicious_traffic.pcap (124MB)"
+  },
+  {
+    "command": "mimikatz",
+    "category": "Credential Analysis",
+    "description": "Extracts plaintext passwords, hashes, and Kerberos tickets from Windows memory. Used to detect credential theft attacks.",
+    "usage": "mimikatz sekurlsa::logonpasswords",
+    "forensicUse": "Forensic investigators analyze systems for evidence of Mimikatz usage indicating credential dumping attacks. Also used in authorized IR to identify compromised credentials.",
+    "simulatedOutput": "Credential Extraction Analysis:\n  Analyzing LSASS memory dump...\n  Found credentials:\n    → User: admin | Password: P@ssw0rd123 (plaintext)\n    → User: dbadmin | NTLM: 8846f7eaee8fb117ad06bdd830b7586c\n    → Kerberos tickets: 5 TGTs extracted\n  **Evidence: Attacker used Mimikatz for credential theft**\n  **All credentials should be reset immediately**\n  Risk: Domain Administrator credentials compromised"
+  },
+  {
+    "command": "mount",
+    "category": "File System",
+    "description": "Mounts forensic images in read-only mode for examination without modifying evidence. Supports E01, DD, and other forensic formats.",
+    "usage": "mount -o ro,loop <image.dd> <mountpoint>",
+    "forensicUse": "Read-only mounting ensures evidence integrity while allowing investigators to browse file systems, extract files, and analyze contents without modification.",
+    "simulatedOutput": "Forensic Image Mount:\n  Image: evidence_disk.E01 (500GB)\n  Mount point: /mnt/evidence\n  Mode: Read-only (forensically sound)\n  File system: NTFS\n  Mount successful ✓\n  Evidence accessible at: /mnt/evidence/\n  Write protection: ENABLED\n  Hash verification: PASSED\n  Ready for analysis without modification"
+  },
+  {
+    "command": "scan",
+    "category": "System",
+    "description": "Performs comprehensive system integrity scan checking for malware signatures, rootkits, unauthorized modifications, and suspicious artifacts.",
+    "usage": "scan [--deep|--quick]",
+    "forensicUse": "Initial triage tool for detecting malware, backdoors, and system compromises during incident response investigations.",
+    "simulatedOutput": "System Integrity Scan:\n  Scanning mode: Deep analysis\n  File system: 1,247,583 files scanned\n  Registry: 15,847 keys analyzed\n  Memory: 47 processes examined\n  Network: 12 connections checked\n  Results:\n    ✓ No active threats detected\n    ✓ System integrity verified\n    ✓ Hash validation: PASSED\n    ✓ No rootkit indicators found\n  Suspicious files: 0 | Quarantined: 0\n  System status: CLEAN"
+  },
+  {
+    "command": "analyze",
+    "category": "System",
+    "description": "Performs intelligent analysis of loaded evidence identifying key artifacts, suspicious patterns, and investigation priorities.",
+    "usage": "analyze [--artifacts|--timeline|--threats]",
+    "forensicUse": "Automated artifact triage that prioritizes evidence review and identifies high-value forensic artifacts for investigator focus.",
+    "simulatedOutput": "Evidence Analysis:\n  Analyzing loaded evidence...\n  Key artifacts identified:\n    1. MFT Record: Deleted file recovery possible\n       → 847 deleted entries | 623 recoverable\n    2. Registry Key: USB device history\n       → 5 external devices connected in incident window\n    3. Prefetch File: Malware execution confirmed\n       → suspicious.exe ran 47 times over 3 days\n  Priority findings: 3 high, 7 medium, 15 low\n  Recommended next steps: Timeline analysis, file recovery"
+  },
+  {
+    "command": "date",
+    "category": "System",
+    "description": "Displays current system date and time with timezone information. Used for timestamp correlation in forensic analysis.",
+    "usage": "date",
+    "forensicUse": "Establishes temporal reference for evidence analysis and ensures forensic workstation clock accuracy for timestamp reliability.",
+    "simulatedOutput": "System Date/Time:\n  Current: Fri Nov 28 2025 23:45:32 GMT-0500 (EST)\n  UTC: Sat Nov 29 2025 04:45:32 UTC\n  Timezone: Eastern Standard Time (UTC-5)\n  Forensic Context: All timestamps in reports use UTC\n  Workstation clock: NTP synchronized ✓"
+  }
+]

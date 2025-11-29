@@ -1,0 +1,178 @@
+{
+  "terms": {
+    "acquisition": {
+      "definition": "The process of creating forensically sound copies of digital evidence",
+      "context": "Must be bit-for-bit exact with cryptographic hash verification for court admissibility"
+    },
+    "chain_of_custody": {
+      "definition": "Documentation trail proving evidence integrity from collection to court",
+      "context": "Every person who handled evidence must be documented with timestamps"
+    },
+    "volatile_data": {
+      "definition": "Data that exists only while system is powered (RAM, active connections, running processes)",
+      "context": "Lost at shutdown—must be acquired first during incident response"
+    },
+    "slack_space": {
+      "definition": "Unused space between end of file and end of cluster on disk",
+      "context": "Often contains fragments of deleted files, critical for data recovery"
+    },
+    "unallocated_space": {
+      "definition": "Disk sectors marked as available for reuse, may contain deleted file data",
+      "context": "File carving can recover deleted files from unallocated space until overwritten"
+    },
+    "hash": {
+      "definition": "Cryptographic fingerprint (MD5/SHA-1/SHA-256) proving file integrity",
+      "context": "Any byte change produces completely different hash—verifies evidence unchanged"
+    },
+    "timeline": {
+      "definition": "Chronological sequence of events reconstructed from multiple artifact sources",
+      "context": "Correlates file access, log entries, registry changes, network activity"
+    },
+    "artifact": {
+      "definition": "Digital evidence created by system or user activity (logs, registry, prefetch, etc.)",
+      "context": "Artifacts prove actions occurred even when files are deleted"
+    },
+    "c2": {
+      "definition": "Command and Control server used by malware for remote attacker communication",
+      "context": "Identifying C2 infrastructure helps attribute attacks and block future communications"
+    },
+    "ioc": {
+      "definition": "Indicator of Compromise—observable evidence of system breach (IP, hash, domain, etc.)",
+      "context": "IOCs enable threat hunting across multiple systems for same attack campaign"
+    },
+    "ttp": {
+      "definition": "Tactics, Techniques, and Procedures—characteristic attack methods used by threat actors",
+      "context": "Understanding TTPs helps predict attacker next moves and implement defenses"
+    },
+    "rootkit": {
+      "definition": "Malware that hides its presence by subverting OS functions",
+      "context": "Detected via memory forensics comparing kernel structures vs. expected behavior"
+    },
+    "persistence": {
+      "definition": "Mechanisms ensuring malware survives reboot (registry Run keys, services, scheduled tasks)",
+      "context": "Always check common persistence locations during malware investigations"
+    },
+    "lateral_movement": {
+      "definition": "Attacker spreading from initial compromised system to other network systems",
+      "context": "Event logs show authentication across systems, network logs show connections"
+    },
+    "privilege_escalation": {
+      "definition": "Gaining higher access rights than initially compromised account",
+      "context": "Event logs record use of admin privileges, process creation of elevated processes"
+    },
+    "exfiltration": {
+      "definition": "Unauthorized data removal from network/system",
+      "context": "Large outbound transfers, encrypted channels, cloud uploads are red flags"
+    },
+    "file_carving": {
+      "definition": "Recovering files by identifying header/footer signatures without file system metadata",
+      "context": "Works on formatted drives, damaged file systems, unallocated space"
+    },
+    "mft": {
+      "definition": "Master File Table—NTFS structure tracking all files with metadata and timestamps",
+      "context": "Parsing MFT reveals deleted entries, file timelines, directory structures"
+    },
+    "prefetch": {
+      "definition": "Windows performance feature caching program load data, proves execution",
+      "context": "Contains first/last run time, execution count, files accessed—survives malware deletion"
+    },
+    "shimcache": {
+      "definition": "Windows Application Compatibility Cache tracking executables, proves file presence",
+      "context": "Records file path and last modified time even if never actually executed"
+    },
+    "shellbags": {
+      "definition": "Registry artifacts tracking folder access for Windows Explorer view settings",
+      "context": "Proves user accessed specific folders, even on external drives or network shares"
+    },
+    "userassist": {
+      "definition": "Windows registry key counting program executions with timestamps",
+      "context": "ROT13-encoded keys track GUI program usage and execution counts"
+    },
+    "amcache": {
+      "definition": "Windows artifact logging program installations and executions",
+      "context": "Newer artifact supplementing shimcache, includes SHA1 hashes of executables"
+    },
+    "jumplists": {
+      "definition": "Windows 7+ files tracking recently accessed documents per application",
+      "context": "Proves files were opened with specific programs, includes timestamps"
+    },
+    "sigma": {
+      "definition": "Generic signature format for log events, enables threat hunting rules",
+      "context": "Sigma rules detect known attack patterns across different SIEM platforms"
+    },
+    "yara": {
+      "definition": "Pattern matching tool for malware identification via custom rules",
+      "context": "Rules describe malware characteristics (strings, functions, behaviors)"
+    },
+    "stix": {
+      "definition": "Structured Threat Information Expression—standardized threat intelligence format",
+      "context": "Enables automated IOC sharing between organizations and security tools"
+    },
+    "mitre_attck": {
+      "definition": "Framework categorizing adversary tactics and techniques",
+      "context": "Maps attacks to specific TTP categories for standardized threat analysis"
+    },
+    "write_blocker": {
+      "definition": "Hardware/software preventing writes to evidence device during acquisition",
+      "context": "Ensures original evidence unmodified—critical for forensic soundness"
+    },
+    "forensic_soundness": {
+      "definition": "Evidence collection methodology ensuring court admissibility",
+      "context": "Requires write protection, hash verification, and documented chain of custody"
+    },
+    "triage": {
+      "definition": "Rapid preliminary analysis to identify scope and severity of incident",
+      "context": "Focuses on high-value artifacts: memory, active connections, volatile data"
+    },
+    "dead_box": {
+      "definition": "Forensic analysis of powered-off system via disk imaging",
+      "context": "Safer than live analysis but loses volatile data (memory, connections)"
+    },
+    "live_forensics": {
+      "definition": "Evidence collection from running system without shutdown",
+      "context": "Captures volatile data but risks alerting attacker or evidence modification"
+    }
+  },
+  "acronyms": {
+    "DFIR": "Digital Forensics and Incident Response",
+    "IOC": "Indicator of Compromise",
+    "TTP": "Tactics, Techniques, and Procedures",
+    "C2": "Command and Control",
+    "APT": "Advanced Persistent Threat",
+    "RAM": "Random Access Memory",
+    "MFT": "Master File Table",
+    "NTFS": "New Technology File System",
+    "EXT4": "Fourth Extended Filesystem (Linux)",
+    "FAT": "File Allocation Table",
+    "MD5": "Message Digest Algorithm 5",
+    "SHA": "Secure Hash Algorithm",
+    "PST": "Personal Storage Table (Outlook)",
+    "MBOX": "Mailbox Format",
+    "EML": "Email Message",
+    "EVTX": "Windows Event Log (XML-based)",
+    "PCAP": "Packet Capture",
+    "HTTP": "Hypertext Transfer Protocol",
+    "TLS": "Transport Layer Security",
+    "SSL": "Secure Sockets Layer",
+    "DNS": "Domain Name System",
+    "IP": "Internet Protocol",
+    "TCP": "Transmission Control Protocol",
+    "UDP": "User Datagram Protocol",
+    "USB": "Universal Serial Bus",
+    "EXIF": "Exchangeable Image File Format",
+    "GPS": "Global Positioning System",
+    "ROT13": "Rotate by 13 Places (simple cipher)",
+    "PE": "Portable Executable (Windows)",
+    "ELF": "Executable and Linkable Format (Linux)",
+    "DLL": "Dynamic Link Library",
+    "API": "Application Programming Interface",
+    "SIEM": "Security Information and Event Management",
+    "SOC": "Security Operations Center",
+    "IR": "Incident Response",
+    "E01": "Expert Witness Format",
+    "DD": "Data Definition (disk dump command)",
+    "GUI": "Graphical User Interface",
+    "CLI": "Command Line Interface",
+    "OS": "Operating System"
+  }
+}

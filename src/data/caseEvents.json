@@ -1,0 +1,42 @@
+[
+  {
+    "caseId": "ransomware-investigation",
+    "events": [
+      { "time": "09:47", "label": "Phishing Email Opened", "detail": "HR staff opened macro-enabled attachment", "severity": "high" },
+      { "time": "09:52", "label": "C2 Beacon Established", "detail": "Cobalt Strike beacon reached 203.0.113.87", "severity": "high" },
+      { "time": "10:30", "label": "Lateral Movement", "detail": "PsExec spawned across finance servers", "severity": "medium" },
+      { "time": "11:20", "label": "Encryption Triggered", "detail": "REvil payload began encrypting home directories", "severity": "critical" },
+      { "time": "11:47", "label": "Exfil Complete", "detail": "14.7GB transferred to remote host", "severity": "critical" }
+    ]
+  },
+  {
+    "caseId": "insider-data-theft",
+    "events": [
+      { "time": "22:47", "label": "After-hours VPN Login", "detail": "Employee connected from home network", "severity": "medium" },
+      { "time": "23:05", "label": "Repo Cloning", "detail": "Git repositories mirrored locally", "severity": "high" },
+      { "time": "23:41", "label": "USB Device Mounted", "detail": "SanDisk Extreme 256GB detected", "severity": "medium" },
+      { "time": "00:12", "label": "Dropbox Upload", "detail": "34 uploads to personal account", "severity": "high" },
+      { "time": "00:58", "label": "Deletion Attempt", "detail": "TO_PERSONAL folder removed", "severity": "low" }
+    ]
+  },
+  {
+    "caseId": "cloud-credential-theft",
+    "events": [
+      { "time": "06:12", "label": "Credentials Exposed", "detail": "AWS keys pushed to GitHub", "severity": "medium" },
+      { "time": "12:37", "label": "GuardDuty Alert", "detail": "Anomalous API calls detected", "severity": "high" },
+      { "time": "13:05", "label": "Privilege Escalation", "detail": "Assumed data-scientist role", "severity": "high" },
+      { "time": "14:20", "label": "Bulk S3 Download", "detail": "847 objects exfiltrated", "severity": "critical" },
+      { "time": "15:40", "label": "Backdoor User Created", "detail": "backup-service IAM user added", "severity": "critical" }
+    ]
+  },
+  {
+    "caseId": "mobile-stalkerware",
+    "events": [
+      { "time": "08:10", "label": "Device Seized", "detail": "Victim provided phone for imaging", "severity": "low" },
+      { "time": "09:25", "label": "FlexiSPY Located", "detail": "Hidden app identified", "severity": "high" },
+      { "time": "11:00", "label": "C2 Traffic Confirmed", "detail": "Encrypted uploads to spyware-cloud", "severity": "medium" },
+      { "time": "13:45", "label": "Data Extraction", "detail": "234 call recordings recovered", "severity": "high" },
+      { "time": "15:10", "label": "Attribution", "detail": "License tied to suspect email", "severity": "critical" }
+    ]
+  }
+]

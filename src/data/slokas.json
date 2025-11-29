@@ -1,0 +1,82 @@
+[
+  {
+    "id": "sloka-1",
+    "devanagari": "सत्यं एव जयते",
+    "transliteration": "Satyaṁ eva jayate",
+    "english": "Truth alone triumphs",
+    "symbol": "🔱",
+    "symbolMeaning": "Trishul — dharma and justice",
+    "context": "investigation",
+    "category": "truth"
+  },
+  {
+    "id": "sloka-2",
+    "devanagari": "ज्ञानं परमं बलम्",
+    "transliteration": "Jñānaṁ paramaṁ balam",
+    "english": "Knowledge is supreme power",
+    "symbol": "📜",
+    "symbolMeaning": "Scroll — wisdom and investigation",
+    "context": "learning",
+    "category": "knowledge"
+  },
+  {
+    "id": "sloka-3",
+    "devanagari": "विद्या ददाति विनयं",
+    "transliteration": "Vidyā dadāti vinayam",
+    "english": "Knowledge gives humility",
+    "symbol": "🕉️",
+    "symbolMeaning": "Om — universal truth",
+    "context": "wisdom",
+    "category": "humility"
+  },
+  {
+    "id": "sloka-4",
+    "devanagari": "धर्मो रक्षति रक्षितः",
+    "transliteration": "Dharmo rakṣati rakṣitaḥ",
+    "english": "Dharma protects those who protect it",
+    "symbol": "⚖️",
+    "symbolMeaning": "Balance — justice and righteousness",
+    "context": "justice",
+    "category": "dharma"
+  },
+  {
+    "id": "sloka-5",
+    "devanagari": "यतो धर्मस्ततो जयः",
+    "transliteration": "Yato dharmas tato jayaḥ",
+    "english": "Where there is dharma, there is victory",
+    "symbol": "🏆",
+    "symbolMeaning": "Victory — triumph of righteousness",
+    "context": "success",
+    "category": "victory"
+  },
+  {
+    "id": "sloka-6",
+    "devanagari": "अहिंसा परमो धर्मः",
+    "transliteration": "Ahiṁsā paramo dharmaḥ",
+    "english": "Non-violence is the highest virtue",
+    "symbol": "☮️",
+    "symbolMeaning": "Peace — ethical investigation",
+    "context": "ethics",
+    "category": "nonviolence"
+  },
+  {
+    "id": "sloka-7",
+    "devanagari": "सा विद्या या विमुक्तये",
+    "transliteration": "Sā vidyā yā vimuktaye",
+    "english": "That is knowledge which liberates",
+    "symbol": "🔓",
+    "symbolMeaning": "Unlock — freedom through knowledge",
+    "context": "liberation",
+    "category": "freedom"
+  },
+  {
+    "id": "sloka-8",
+    "devanagari": "विवेकः सर्वसाधनम्",
+    "transliteration": "Vivekaḥ sarvasādhanam",
+    "english": "Discrimination is the means to everything",
+    "symbol": "🧠",
+    "symbolMeaning": "Mind — analytical thinking",
+    "context": "analysis",
+    "category": "wisdom"
+  }
+]

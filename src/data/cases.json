@@ -1,0 +1,367 @@
+[
+  {
+    "id": "ransomware-investigation",
+    "scenario": "A healthcare organization suffered a ransomware attack encrypting patient records and demanding Bitcoin payment. Network was immediately isolated. Determine attack vector, scope, and attribution.",
+    "artifacts": [
+      {
+        "type": "Encrypted Files",
+        "description": "3,842 .encrypted files across file servers with ransom note README.txt",
+        "location": "\\\\FileServer01\\Shares\\ (all subdirectories)"
+      },
+      {
+        "type": "Ransom Note",
+        "description": "Text file with Bitcoin wallet address and Tor onion link for payment portal",
+        "location": "Desktop of 47 user workstations and all network shares"
+      },
+      {
+        "type": "Firewall Logs",
+        "description": "Palo Alto firewall logs covering 72 hours before attack",
+        "location": "/var/log/pan/ (15GB compressed)"
+      },
+      {
+        "type": "Email Server Logs",
+        "description": "Exchange server logs showing inbound email traffic",
+        "location": "C:\\Program Files\\Microsoft\\Exchange Server\\V15\\Logging\\"
+      },
+      {
+        "type": "EDR Alerts",
+        "description": "CrowdStrike Falcon alerts flagging suspicious PowerShell activity",
+        "location": "CrowdStrike cloud console - 23 high-severity alerts"
+      }
+    ],
+    "workflow": [
+      {
+        "step": 1,
+        "action": "Isolate affected systems and preserve memory dumps from patient zero workstation",
+        "tool": "FTK Imager / DumpIt",
+        "expectedResult": "Memory dump captured before shutdown. Live processes, network connections, and loaded DLLs preserved for analysis."
+      },
+      {
+        "step": 2,
+        "action": "Analyze email logs to identify phishing email that delivered initial payload",
+        "tool": "Log Parser / Splunk",
+        "expectedResult": "Identified malicious email sent to HR dept at 09:47 UTC with macro-enabled Excel attachment 'Invoice_2024.xlsm'. Email originated from spoofed sender address."
+      },
+      {
+        "step": 3,
+        "action": "Extract and analyze malicious attachment in sandbox environment",
+        "tool": "Any.run / Joe Sandbox",
+        "expectedResult": "Macro contained obfuscated PowerShell downloading Cobalt Strike beacon from 203.0.113.87. Beacon established C2 connection and downloaded ransomware payload."
+      },
+      {
+        "step": 4,
+        "action": "Review EDR telemetry for lateral movement and persistence mechanisms",
+        "tool": "CrowdStrike Falcon / Sysmon logs",
+        "expectedResult": "Attacker used PsExec to move laterally via compromised admin credentials. Created scheduled task 'WindowsUpdateCheck' for persistence. Credential dumping via Mimikatz detected."
+      },
+      {
+        "step": 5,
+        "action": "Analyze memory dump for encryption key artifacts and ransomware variant identification",
+        "tool": "Volatility",
+        "expectedResult": "Identified REvil/Sodinokibi ransomware variant. Encryption keys not recoverable from memory. Found file handles showing encryption started in C:\\Users\\ before spreading to network shares."
+      },
+      {
+        "step": 6,
+        "action": "Reconstruct timeline of attack from initial compromise to full encryption",
+        "tool": "Autopsy / Plaso",
+        "expectedResult": "Complete timeline: Email opened 09:47 → Macro execution 09:48 → C2 beacon 09:52 → Credential theft 10:15 → Lateral movement 10:30 → Encryption began 11:20 → Completed 11:47."
+      },
+      {
+        "step": 7,
+        "action": "Identify scope of compromise and data exfiltration attempts",
+        "tool": "Wireshark / Network logs",
+        "expectedResult": "Before encryption, attacker exfiltrated 14.7GB to 203.0.113.87:443. Traffic analysis shows database dumps and compressed archives. No decryption without payment or backups."
+      }
+    ],
+    "outcomes": [
+      "Attack vector confirmed: phishing email with malicious macro targeting HR department",
+      "REvil ransomware deployed via Cobalt Strike framework",
+      "Attacker maintained access for 2 hours before triggering encryption",
+      "14.7GB of sensitive data exfiltrated before encryption",
+      "No viable decryption without paying ransom or restoring from backups",
+      "Recommended: Restore from offline backups (available), do not pay ransom",
+      "Indicators of Compromise (IOCs) provided to threat intelligence platforms"
+    ],
+    "legalNotes": [
+      "Report filed with FBI Internet Crime Complaint Center (IC3)",
+      "HIPAA breach notification required within 60 days",
+      "Forensic evidence preserved with chain of custody for potential prosecution",
+      "External threat intelligence correlated C2 infrastructure with known APT group"
+    ]
+  },
+  {
+    "id": "insider-data-theft",
+    "scenario": "Former employee suspected of stealing proprietary source code and customer database before resignation. Company seeks evidence for civil litigation and potential criminal charges.",
+    "artifacts": [
+      {
+        "type": "Workstation Image",
+        "description": "Full disk image of employee's company-issued laptop (Dell Latitude, 512GB SSD)",
+        "location": "Evidence locker - sealed laptop acquired 2 days after resignation"
+      },
+      {
+        "type": "Network Logs",
+        "description": "VPN access logs, web proxy logs, and file server access logs covering 30 days",
+        "location": "SIEM system (Splunk) - exported logs 45GB"
+      },
+      {
+        "type": "Cloud Activity",
+        "description": "G Suite admin logs showing Drive, Gmail, and Chrome sync activity",
+        "location": "G Suite Admin Console - 90-day retention"
+      },
+      {
+        "type": "Badge Access",
+        "description": "Physical access control logs showing building entry/exit times",
+        "location": "HID access control database"
+      },
+      {
+        "type": "USB History",
+        "description": "Registry artifacts showing connected USB devices",
+        "location": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Enum\\USBSTOR"
+      }
+    ],
+    "workflow": [
+      {
+        "step": 1,
+        "action": "Image laptop SSD and verify hash before analysis to maintain evidence integrity",
+        "tool": "FTK Imager",
+        "expectedResult": "Forensic image created: 512GB → 287GB (E01 compressed). MD5 and SHA-256 hashes documented. Original laptop sealed and stored."
+      },
+      {
+        "step": 2,
+        "action": "Analyze USB device history and identify external storage connections",
+        "tool": "USB Detective / Registry Explorer",
+        "expectedResult": "Found 3 USB devices connected in final week: 'SanDisk Extreme 256GB' (S/N: AA01...), 'Samsung T7 1TB' (S/N: S4Z...), personal phone 'Galaxy S21' (MTP mode)."
+      },
+      {
+        "step": 3,
+        "action": "Recover deleted files and analyze file system timestamps for exfiltration indicators",
+        "tool": "Autopsy",
+        "expectedResult": "Recovered 1,247 deleted files including .git repository clones, database exports (.sql, .csv), and 'TO_PERSONAL' folder deleted 1 day before resignation. MACB timestamps show bulk file access."
+      },
+      {
+        "step": 4,
+        "action": "Examine browser history, cloud uploads, and personal email usage",
+        "tool": "Magnet AXIOM",
+        "expectedResult": "Chrome history shows 34 uploads to personal Dropbox account. Gmail sent 17 emails to personal address with attachments. Dropbox web interface accessed 47 times in final week."
+      },
+      {
+        "step": 5,
+        "action": "Correlate G Suite logs with local activity to identify cloud exfiltration",
+        "tool": "Google Takeout / GCAT",
+        "expectedResult": "G Suite logs confirm: 2.3GB uploaded to personal Drive, 47 files shared externally, Chrome sync transferred 847 passwords and bookmarks to personal Google account."
+      },
+      {
+        "step": 6,
+        "action": "Analyze network traffic logs for off-hours activity and large transfers",
+        "tool": "Splunk",
+        "expectedResult": "Off-hours VPN access detected: 11:47 PM - 2:34 AM on 3 consecutive nights before resignation. File server logs show 18GB transferred to workstation during these sessions."
+      },
+      {
+        "step": 7,
+        "action": "Build timeline correlating physical access, digital activity, and data transfers",
+        "tool": "Plaso / Timesketch",
+        "expectedResult": "Timeline shows: After-hours badge entry → VPN login → Source code repository clones → USB device connection → Large file deletions → Dropbox uploads. Pattern repeated 3x."
+      }
+    ],
+    "outcomes": [
+      "Conclusive evidence of intentional data theft: source code, customer database, and proprietary algorithms",
+      "Employee accessed systems during off-hours (11 PM - 2 AM) when monitoring less likely",
+      "Multi-channel exfiltration: USB drives, personal Dropbox, Gmail attachments, Google Drive",
+      "Approximately 23GB of company data stolen across all channels",
+      "Deleted local copies and cleared browser history to conceal activity (unsuccessful due to forensic recovery)",
+      "Timeline evidence suitable for civil litigation and criminal referral",
+      "Company recovered list of compromised files for damage assessment"
+    ],
+    "legalNotes": [
+      "Evidence meets admissibility standards: forensic imaging with verified hashes, documented chain of custody",
+      "Computer Fraud and Abuse Act (CFAA) violation: unauthorized access after resignation notice",
+      "Trade secret misappropriation under Defend Trade Secrets Act (DTSA)",
+      "Civil lawsuit filed: breach of employment agreement and NDA",
+      "Criminal complaint filed with local FBI field office for federal prosecution consideration"
+    ]
+  },
+  {
+    "id": "cloud-credential-theft",
+    "scenario": "SaaS company detects unauthorized access to AWS cloud infrastructure. Attacker accessed S3 buckets containing customer data. Investigate breach source, scope, and data exposure.",
+    "artifacts": [
+      {
+        "type": "AWS CloudTrail Logs",
+        "description": "API call history for all AWS services over past 90 days",
+        "location": "S3 bucket: s3://company-cloudtrail-logs/"
+      },
+      {
+        "type": "AWS GuardDuty Alerts",
+        "description": "Security findings including unusual API calls and credential usage",
+        "location": "GuardDuty console - 47 high-severity findings"
+      },
+      {
+        "type": "VPC Flow Logs",
+        "description": "Network traffic logs for EC2 instances and load balancers",
+        "location": "S3 bucket: s3://company-vpc-flowlogs/"
+      },
+      {
+        "type": "IAM Access Advisor",
+        "description": "Service access timestamps for all IAM users and roles",
+        "location": "IAM Console - Last accessed data"
+      },
+      {
+        "type": "S3 Access Logs",
+        "description": "Bucket access logs showing object downloads",
+        "location": "S3 bucket: s3://company-s3-access-logs/"
+      }
+    ],
+    "workflow": [
+      {
+        "step": 1,
+        "action": "Review GuardDuty alerts for initial indicators and suspicious activity timeline",
+        "tool": "AWS GuardDuty / CloudWatch",
+        "expectedResult": "GuardDuty flagged: UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration and Exfiltration:S3/ObjectRead.Unusual from unknown IP 198.51.100.42. Activity started 72 hours ago."
+      },
+      {
+        "step": 2,
+        "action": "Analyze CloudTrail logs to identify compromised credentials and attacker actions",
+        "tool": "AWS Athena / CloudTrail Lake",
+        "expectedResult": "IAM user 'jenkins-deploy' accessed from 198.51.100.42 (Russia). Credentials compromised via exposed .aws/credentials in public GitHub repository. User enumerated S3 buckets, IAM policies, and EC2 instances."
+      },
+      {
+        "step": 3,
+        "action": "Query S3 access logs to determine which objects were accessed or downloaded",
+        "tool": "AWS Athena",
+        "expectedResult": "Attacker downloaded 847 objects from s3://customer-data-prod/ totaling 23.7GB. Files include customer databases, API credentials, and encryption keys. Downloads occurred over 3 separate sessions."
+      },
+      {
+        "step": 4,
+        "action": "Review IAM Access Advisor to identify privilege escalation attempts",
+        "tool": "AWS IAM Console / CLI",
+        "expectedResult": "Attacker attempted CreateAccessKey for admin users (failed - insufficient permissions). Successfully used AssumeRole to escalate from jenkins-deploy to data-scientist role with broader S3 access."
+      },
+      {
+        "step": 5,
+        "action": "Analyze VPC flow logs for data exfiltration endpoints and volume",
+        "tool": "AWS Athena / VPC Flow Logs",
+        "expectedResult": "Large data transfers to 198.51.100.42:443 correlate with S3 downloads. Total egress: 24.1GB over 3 sessions. Traffic used HTTPS, encrypted in transit. Destination IP traced to VPN exit node in Russia."
+      },
+      {
+        "step": 6,
+        "action": "Check for backdoor creation: new IAM users, access keys, or Lambda functions",
+        "tool": "CloudTrail / IAM Console",
+        "expectedResult": "Attacker created IAM user 'backup-service' with programmatic access. Created access key AKIA... and attached PowerUserAccess policy. Lambda function 'log-processor' created for persistence (not executed yet)."
+      },
+      {
+        "step": 7,
+        "action": "Reconstruct complete attack timeline and assess impact",
+        "tool": "CloudTrail Insights / Timeline tools",
+        "expectedResult": "Timeline: Credentials exposed on GitHub → 6 hours → First AWS login → Reconnaissance (2 hours) → Privilege escalation → Data exfiltration (3 sessions over 72 hours) → Backdoor creation."
+      }
+    ],
+    "outcomes": [
+      "Attack vector: Exposed AWS credentials in public GitHub repository (committed 8 months prior)",
+      "Compromised IAM user: jenkins-deploy with S3 read permissions",
+      "Privilege escalation: AssumeRole to data-scientist role for broader access",
+      "Data breach: 847 customer database files totaling 23.7GB exfiltrated",
+      "Persistence: Backdoor IAM user and Lambda function created",
+      "Affected customers: 15,234 accounts with PII exposed",
+      "Remediation: Revoke all access keys, rotate credentials, enable MFA, remove backdoors, notify affected customers"
+    ],
+    "legalNotes": [
+      "GDPR breach notification required within 72 hours to EU supervisory authorities",
+      "CCPA breach notification required for California residents",
+      "Forensic evidence preserved in S3 with object lock and Legal Hold",
+      "FBI Cyber Division notified - potential attribution to criminal organization",
+      "Cyber insurance claim filed for breach response costs and liability coverage"
+    ]
+  },
+  {
+    "id": "mobile-stalkerware",
+    "scenario": "Domestic violence case where victim suspects spyware installed on phone by abusive partner. Device shows signs of unauthorized monitoring and location tracking.",
+    "artifacts": [
+      {
+        "type": "Android Phone (Victim)",
+        "description": "Samsung Galaxy S21 with suspected spyware. Device not factory reset.",
+        "location": "Evidence locker - victim provided device voluntarily"
+      },
+      {
+        "type": "Google Location History",
+        "description": "Timeline of device location data from Google account",
+        "location": "Google Takeout export - 18 months of data"
+      },
+      {
+        "type": "Installed Apps List",
+        "description": "All applications including system apps and hidden apps",
+        "location": "ADB shell: pm list packages -f"
+      },
+      {
+        "type": "Network Traffic Capture",
+        "description": "PCAP of device network activity over 24 hours",
+        "location": "Captured via WiFi access point monitoring"
+      },
+      {
+        "type": "Cloud Backup",
+        "description": "Google Drive backup containing app data and settings",
+        "location": "Google Drive - backup dated 3 days ago"
+      }
+    ],
+    "workflow": [
+      {
+        "step": 1,
+        "action": "Create forensic backup of device before analysis to preserve evidence",
+        "tool": "Magnet AXIOM / ADB",
+        "expectedResult": "Full file system backup created: 47GB. Backup includes app data, system files, and deleted file recovery. Hash verified. Original device sealed."
+      },
+      {
+        "step": 2,
+        "action": "Scan for known stalkerware signatures and suspicious apps",
+        "tool": "AXIOM Cyber / Stinger",
+        "expectedResult": "Detected: FlexiSPY stalkerware installed 8 months ago. App disguised as 'System Update Service'. Has permissions: Location, SMS, Call logs, Camera, Microphone, Contacts."
+      },
+      {
+        "step": 3,
+        "action": "Extract stalkerware configuration and C2 server details",
+        "tool": "APK analysis / Jadx decompiler",
+        "expectedResult": "Stalkerware configured with account ID linked to suspect's email address. C2 server: spyware-cloud.example. App uploads data every 15 minutes: GPS coordinates, SMS, call recordings, photos."
+      },
+      {
+        "step": 4,
+        "action": "Review location history to establish monitoring timeline",
+        "tool": "Google Location History / Timeline analysis",
+        "expectedResult": "Location tracking shows victim's movements for past 8 months with GPS coordinates every 5-10 minutes. Data correlates with stalkerware installation date. Suspect demonstrated knowledge of victim's whereabouts."
+      },
+      {
+        "step": 5,
+        "action": "Analyze network traffic for data exfiltration to C2 server",
+        "tool": "Wireshark / NetworkMiner",
+        "expectedResult": "Captured 847 HTTPS connections to spyware-cloud.example over 24 hours. Traffic analysis shows encrypted uploads every 15 minutes (average 2.3MB each). Certificate shows C2 infrastructure."
+      },
+      {
+        "step": 6,
+        "action": "Extract call recordings and SMS intercepts from stalkerware data directory",
+        "tool": "AXIOM / File system analysis",
+        "expectedResult": "Found 234 call recordings (total 4.7GB) and 1,847 intercepted SMS messages. Recordings include conversations with victim's attorney, therapist, and family members. SMS includes 2FA codes and private conversations."
+      },
+      {
+        "step": 7,
+        "action": "Correlate suspect's access to device with stalkerware installation timeline",
+        "tool": "Timeline analysis / Statement review",
+        "expectedResult": "Victim statements confirm suspect had physical access to phone 8 months ago during relationship. Phone briefly taken under pretense of 'software update'. Timeline matches stalkerware installation timestamp exactly."
+      }
+    ],
+    "outcomes": [
+      "FlexiSPY commercial stalkerware confirmed on victim's device",
+      "Installation occurred 8 months ago when suspect had brief physical access",
+      "Stalkerware account linked to suspect's email address (definitive attribution)",
+      "Extensive surveillance: location tracking, SMS interception, call recording, photo access",
+      "234 call recordings and 1,847 SMS messages intercepted over 8 months",
+      "Stalkerware granted access to conversations with attorney (attorney-client privilege violation)",
+      "Evidence suitable for criminal wiretapping charges and protective order",
+      "Device forensically cleaned and stalkerware removed for victim safety"
+    ],
+    "legalNotes": [
+      "Wiretapping Act violation: unauthorized interception of electronic communications",
+      "Computer Fraud and Abuse Act (CFAA) violation: unauthorized access to protected computer",
+      "Federal stalking statute 18 U.S.C. § 2261A applicable",
+      "Evidence supports restraining order and criminal prosecution",
+      "Attorney-client privilege violated - potential suppression of evidence in civil proceedings",
+      "Victim referred to domestic violence resources and device security hardening"
+    ]
+  }
+]

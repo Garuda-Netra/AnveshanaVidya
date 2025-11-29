@@ -1,0 +1,321 @@
+[
+  {
+    "id": "mission-1",
+    "title": "First Responder: Evidence Triage",
+    "description": "You have been called to investigate a potentially compromised workstation. Your task is to perform initial triage and document key findings before full acquisition.",
+    "difficulty": "foundation",
+    "estimatedTime": "10 minutes",
+    "prerequisites": [],
+    "references": {
+      "module_ids": ["fundamentals", "acquisition"],
+      "case_id": null
+    },
+    "steps": [
+      {
+        "id": "step-1",
+        "instruction": "Begin by reviewing the available forensic commands. Use the help system to explore command categories.",
+        "requiredCommand": "help",
+        "validationPattern": "^help$",
+        "successMessage": "Command categories loaded. You now have an overview of the forensic arsenal available.",
+        "hint": "Type 'help' to see all available command categories."
+      },
+      {
+        "id": "step-2",
+        "instruction": "Examine the disk forensics commands to understand available acquisition tools.",
+        "requiredCommand": "helpcat disk",
+        "validationPattern": "^helpcat\\s+disk$",
+        "successMessage": "Disk forensics commands reviewed. Note the imaging and hashing utilities.",
+        "hint": "Use 'helpcat disk' to list commands in the disk forensics category."
+      },
+      {
+        "id": "step-3",
+        "instruction": "Before acquiring evidence, you must understand proper hashing. Look up the term 'hash' in the glossary.",
+        "requiredCommand": "glossary hash",
+        "validationPattern": "^glossary\\s+hash$",
+        "successMessage": "Hash concept understood. Cryptographic hashes ensure evidence integrity.",
+        "hint": "Use 'glossary hash' to learn about cryptographic hash functions."
+      },
+      {
+        "id": "step-4",
+        "instruction": "Create a forensic image of the target drive using the appropriate command.",
+        "requiredCommand": "dd",
+        "validationPattern": "^dd",
+        "successMessage": "Forensic image creation initiated. The bit-for-bit copy preserves all evidence.",
+        "hint": "The 'dd' command creates bit-for-bit disk copies."
+      },
+      {
+        "id": "step-5",
+        "instruction": "Verify the integrity of your forensic image by computing its SHA-256 hash.",
+        "requiredCommand": "sha256sum",
+        "validationPattern": "^sha256sum",
+        "successMessage": "Mission Complete! You have successfully performed initial evidence triage with proper integrity verification.",
+        "hint": "Use 'sha256sum' to compute the cryptographic hash of your image."
+      }
+    ],
+    "completionMessage": "Excellent work, investigator. You have completed the First Responder mission. The forensic image is verified and ready for analysis. Always document hash values in your case notes.",
+    "reward": {
+      "badge": "first-responder",
+      "xp": 100
+    }
+  },
+  {
+    "id": "mission-2",
+    "title": "Memory Hunter: Volatility Analysis",
+    "description": "A suspected malware infection requires memory analysis. Extract and analyze a memory dump to identify malicious processes and indicators of compromise.",
+    "difficulty": "triage",
+    "estimatedTime": "15 minutes",
+    "prerequisites": ["mission-1"],
+    "references": {
+      "module_ids": ["memory-forensics", "malware-analysis"],
+      "case_id": "ransomware-investigation"
+    },
+    "steps": [
+      {
+        "id": "step-1",
+        "instruction": "Review memory forensics commands available in the arsenal.",
+        "requiredCommand": "helpcat memory",
+        "validationPattern": "^helpcat\\s+memory$",
+        "successMessage": "Memory forensics toolkit loaded. Volatility plugins are your primary analysis tools.",
+        "hint": "Use 'helpcat memory' to explore memory analysis commands."
+      },
+      {
+        "id": "step-2",
+        "instruction": "Determine the operating system profile of the memory dump.",
+        "requiredCommand": "vol-imageinfo",
+        "validationPattern": "^vol-imageinfo",
+        "successMessage": "Profile identified: Win10x64_19041. This determines which plugins and offsets to use.",
+        "hint": "The 'vol-imageinfo' command identifies the memory dump's OS profile."
+      },
+      {
+        "id": "step-3",
+        "instruction": "List all running processes at the time of capture.",
+        "requiredCommand": "vol-pslist",
+        "validationPattern": "^vol-pslist",
+        "successMessage": "Process list extracted. Review for suspicious process names or parent-child relationships.",
+        "hint": "Use 'vol-pslist' to enumerate processes from the memory dump."
+      },
+      {
+        "id": "step-4",
+        "instruction": "Scan for hidden or unlinked processes that may indicate rootkit activity.",
+        "requiredCommand": "vol-psscan",
+        "validationPattern": "^vol-psscan",
+        "successMessage": "Deep scan complete. Compare with pslist results to identify discrepancies.",
+        "hint": "The 'vol-psscan' command finds processes by scanning memory pools, revealing hidden processes."
+      },
+      {
+        "id": "step-5",
+        "instruction": "Check for code injection by scanning process memory for suspicious executable regions.",
+        "requiredCommand": "vol-malfind",
+        "validationPattern": "^vol-malfind",
+        "successMessage": "Injection analysis complete. Note any processes with VAD regions marked RWX without file backing.",
+        "hint": "Use 'vol-malfind' to detect injected code in process memory."
+      },
+      {
+        "id": "step-6",
+        "instruction": "Open the Memory Triage Lab to review flagged processes interactively.",
+        "requiredCommand": "mem scan",
+        "validationPattern": "^mem\\s+scan$",
+        "successMessage": "Mission Complete! The Memory Triage Lab provides an interactive view of your findings.",
+        "hint": "Type 'mem scan' to open the interactive Memory Triage Lab."
+      }
+    ],
+    "completionMessage": "Outstanding analysis, investigator. You have identified suspicious processes and potential code injection. Document your findings with PIDs, process names, and memory addresses for the incident report.",
+    "reward": {
+      "badge": "memory-hunter",
+      "xp": 200
+    }
+  },
+  {
+    "id": "mission-3",
+    "title": "Network Sleuth: Traffic Analysis",
+    "description": "Network logs indicate potential data exfiltration. Analyze captured traffic to identify the exfiltration channel and trace the destination.",
+    "difficulty": "triage",
+    "estimatedTime": "15 minutes",
+    "prerequisites": ["mission-1"],
+    "references": {
+      "module_ids": ["network-forensics"],
+      "case_id": "data-exfiltration"
+    },
+    "steps": [
+      {
+        "id": "step-1",
+        "instruction": "Review available network forensics commands.",
+        "requiredCommand": "helpcat network",
+        "validationPattern": "^helpcat\\s+network$",
+        "successMessage": "Network analysis toolkit loaded. These tools help analyze packet captures and flow data.",
+        "hint": "Use 'helpcat network' to see network forensics commands."
+      },
+      {
+        "id": "step-2",
+        "instruction": "Analyze network connections from the captured packet data.",
+        "requiredCommand": "tcpdump",
+        "validationPattern": "^tcpdump",
+        "successMessage": "Packet analysis initiated. Look for unusual protocols, ports, or data volumes.",
+        "hint": "Use 'tcpdump' to examine packet capture files."
+      },
+      {
+        "id": "step-3",
+        "instruction": "Extract and examine DNS queries for potential tunneling activity.",
+        "requiredCommand": "tshark-dns",
+        "validationPattern": "^tshark-dns",
+        "successMessage": "DNS traffic extracted. Unusually long domain names or high query volumes indicate tunneling.",
+        "hint": "The 'tshark-dns' command filters DNS traffic from captures."
+      },
+      {
+        "id": "step-4",
+        "instruction": "Generate flow statistics to identify high-volume connections.",
+        "requiredCommand": "netflow-stats",
+        "validationPattern": "^netflow-stats",
+        "successMessage": "Flow statistics generated. Top talkers and unusual port usage are now visible.",
+        "hint": "Use 'netflow-stats' to summarize network flow data."
+      },
+      {
+        "id": "step-5",
+        "instruction": "Open the NetFlow Trace Lab to interactively investigate flagged connections.",
+        "requiredCommand": "trace",
+        "validationPattern": "^trace$",
+        "successMessage": "Mission Complete! The NetFlow Trace Lab allows sorting and filtering of suspicious flows.",
+        "hint": "Type 'trace' to open the interactive NetFlow Trace Lab."
+      }
+    ],
+    "completionMessage": "Excellent detective work. You have traced the exfiltration channel through DNS tunneling to an external C2 server. Preserve the packet captures and document source/destination IPs for legal proceedings.",
+    "reward": {
+      "badge": "network-sleuth",
+      "xp": 200
+    }
+  },
+  {
+    "id": "mission-4",
+    "title": "Timeline Architect: Event Reconstruction",
+    "description": "Reconstruct the attack timeline for a ransomware incident. Correlate events across multiple data sources to establish the sequence of compromise.",
+    "difficulty": "deep-dive",
+    "estimatedTime": "20 minutes",
+    "prerequisites": ["mission-2", "mission-3"],
+    "references": {
+      "module_ids": ["os-forensics", "timeline-analysis"],
+      "case_id": "ransomware-investigation"
+    },
+    "steps": [
+      {
+        "id": "step-1",
+        "instruction": "Begin by reviewing the ransomware investigation case file.",
+        "requiredCommand": "case ransomware-investigation",
+        "validationPattern": "^case\\s+ransomware-investigation$",
+        "successMessage": "Case file loaded. Note the attack vector and timeline scope.",
+        "hint": "Use 'case ransomware-investigation' to load the case details."
+      },
+      {
+        "id": "step-2",
+        "instruction": "Extract filesystem timeline data using the appropriate tool.",
+        "requiredCommand": "fls-timeline",
+        "validationPattern": "^fls-timeline",
+        "successMessage": "Filesystem timeline extracted. MACB times reveal file creation, access, and modification patterns.",
+        "hint": "The 'fls-timeline' command extracts filesystem timestamps."
+      },
+      {
+        "id": "step-3",
+        "instruction": "Parse Windows Event Logs for security-relevant events.",
+        "requiredCommand": "evtx-parse",
+        "validationPattern": "^evtx-parse",
+        "successMessage": "Event logs parsed. Look for logon events, process creation, and service installations.",
+        "hint": "Use 'evtx-parse' to extract events from Windows EVTX files."
+      },
+      {
+        "id": "step-4",
+        "instruction": "Correlate registry artifacts to identify persistence mechanisms.",
+        "requiredCommand": "reg-timeline",
+        "validationPattern": "^reg-timeline",
+        "successMessage": "Registry timeline generated. Run keys and scheduled tasks often reveal persistence.",
+        "hint": "The 'reg-timeline' command analyzes registry timestamps."
+      },
+      {
+        "id": "step-5",
+        "instruction": "Generate a super timeline combining all artifact sources.",
+        "requiredCommand": "plaso-timeline",
+        "validationPattern": "^plaso-timeline",
+        "successMessage": "Super timeline created. All events are now correlated chronologically.",
+        "hint": "Use 'plaso-timeline' to merge multiple timeline sources."
+      },
+      {
+        "id": "step-6",
+        "instruction": "Open the Timeline Lab to visualize and navigate the reconstructed events.",
+        "requiredCommand": "timeline",
+        "validationPattern": "^timeline",
+        "successMessage": "Mission Complete! The Timeline Lab provides interactive event visualization.",
+        "hint": "Type 'timeline' to open the Case Timeline Graph."
+      }
+    ],
+    "completionMessage": "Masterful timeline reconstruction, investigator. You have established the attack sequence from initial compromise through lateral movement to ransomware deployment. This timeline is critical for incident reporting and legal proceedings.",
+    "reward": {
+      "badge": "timeline-architect",
+      "xp": 300
+    }
+  },
+  {
+    "id": "mission-5",
+    "title": "Covert Channel Hunter: Steganography Detection",
+    "description": "Intelligence suggests adversaries are using steganography to exfiltrate data hidden in images. Detect and extract the hidden payload from suspicious image files.",
+    "difficulty": "deep-dive",
+    "estimatedTime": "20 minutes",
+    "prerequisites": ["mission-3"],
+    "references": {
+      "module_ids": ["steganography", "file-carving"],
+      "case_id": "covert-channel"
+    },
+    "steps": [
+      {
+        "id": "step-1",
+        "instruction": "Learn about steganography detection techniques in the glossary.",
+        "requiredCommand": "glossary steganography",
+        "validationPattern": "^glossary\\s+steganography$",
+        "successMessage": "Steganography concepts reviewed. Data can be hidden in the least significant bits of images.",
+        "hint": "Use 'glossary steganography' to understand the hiding techniques."
+      },
+      {
+        "id": "step-2",
+        "instruction": "Examine the suspicious image file's metadata for anomalies.",
+        "requiredCommand": "exiftool",
+        "validationPattern": "^exiftool",
+        "successMessage": "Metadata extracted. Check for unusual comments, timestamps, or software tags.",
+        "hint": "Use 'exiftool' to extract and analyze image metadata."
+      },
+      {
+        "id": "step-3",
+        "instruction": "Perform statistical analysis to detect LSB embedding.",
+        "requiredCommand": "stegdetect",
+        "validationPattern": "^stegdetect",
+        "successMessage": "Statistical analysis complete. Chi-square anomalies indicate potential embedding.",
+        "hint": "The 'stegdetect' command performs statistical steganalysis."
+      },
+      {
+        "id": "step-4",
+        "instruction": "Verify the image integrity by comparing hashes against known good copies.",
+        "requiredCommand": "hash verify",
+        "validationPattern": "^hash\\s+verify",
+        "successMessage": "Hash Verification Lab opened. Compare the suspect image hash with reference values.",
+        "hint": "Type 'hash verify' to open the Hash Verification Station."
+      },
+      {
+        "id": "step-5",
+        "instruction": "Extract the hidden payload using specialized tools.",
+        "requiredCommand": "steghide-extract",
+        "validationPattern": "^steghide-extract",
+        "successMessage": "Payload extracted. The hidden data may require further decryption or analysis.",
+        "hint": "Use 'steghide-extract' to recover embedded data."
+      },
+      {
+        "id": "step-6",
+        "instruction": "Open the Stego Detection Lab to run the full detection pipeline.",
+        "requiredCommand": "stego detect",
+        "validationPattern": "^stego\\s+detect$",
+        "successMessage": "Mission Complete! The Stego Detection Pipeline provides comprehensive analysis.",
+        "hint": "Type 'stego detect' to open the Stego Detection Pipeline."
+      }
+    ],
+    "completionMessage": "Exceptional covert channel analysis, investigator. You have detected and extracted hidden data from the steganographic carrier. Document the carrier hash, extraction method, and payload contents for the evidence log.",
+    "reward": {
+      "badge": "covert-hunter",
+      "xp": 300
+    }
+  }
+]

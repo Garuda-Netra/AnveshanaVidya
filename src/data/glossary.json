@@ -1,0 +1,296 @@
+[
+  {
+    "term": "Chain of Custody",
+    "definition": "A chronological documentation showing the seizure, custody, control, transfer, analysis, and disposition of evidence. Every person who handled evidence must be documented with date, time, purpose, and signature to maintain legal admissibility.",
+    "related": ["Evidence Integrity", "Forensic Process", "Legal Admissibility"],
+    "category": "Legal"
+  },
+  {
+    "term": "Write Blocker",
+    "definition": "A hardware or software tool that permits read-only access to storage devices, preventing any modification of the evidence during acquisition or analysis. Essential for maintaining evidence integrity.",
+    "related": ["Acquisition", "Evidence Preservation", "Forensic Imaging"],
+    "category": "Tools"
+  },
+  {
+    "term": "Hash Function",
+    "definition": "A cryptographic algorithm (MD5, SHA-1, SHA-256) that produces a unique fixed-size fingerprint of data. Used to verify evidence integrity by comparing hashes before and after analysis to detect any modifications.",
+    "related": ["Evidence Integrity", "Verification", "MD5", "SHA-256"],
+    "category": "Technical"
+  },
+  {
+    "term": "Forensic Image",
+    "definition": "A bit-by-bit copy of a storage device including all allocated and unallocated space, slack space, and metadata. Created using tools like FTK Imager or dd. Must be verified with cryptographic hashes.",
+    "related": ["Acquisition", "E01", "DD Image", "Cloning"],
+    "category": "Technical"
+  },
+  {
+    "term": "Slack Space",
+    "definition": "Unused space between the end of a file and the end of the last allocated cluster. Can contain remnants of previously deleted files or data fragments valuable for forensic analysis.",
+    "related": ["File System", "Data Recovery", "Hidden Data"],
+    "category": "Technical"
+  },
+  {
+    "term": "Master File Table (MFT)",
+    "definition": "The core metadata structure in NTFS file systems containing at least one entry for every file and folder. Each entry stores file attributes, timestamps, data location, and alternate data streams.",
+    "related": ["NTFS", "File System", "Metadata", "Timestamps"],
+    "category": "File Systems"
+  },
+  {
+    "term": "Live Acquisition",
+    "definition": "Capturing volatile data from a running system including RAM contents, active network connections, running processes, and encryption keys before shutdown. Critical for incident response.",
+    "related": ["Memory Forensics", "Volatile Data", "Incident Response"],
+    "category": "Technical"
+  },
+  {
+    "term": "File Carving",
+    "definition": "A data recovery technique that identifies and extracts files from unallocated space or damaged file systems by searching for file headers, footers, and internal data structures without relying on file system metadata.",
+    "related": ["Data Recovery", "Deleted Files", "Unallocated Space"],
+    "category": "Technical"
+  },
+  {
+    "term": "Volatile Data",
+    "definition": "Information stored in RAM, cache, or registers that is lost when power is removed. Includes running processes, network connections, encryption keys, and system state. Must be collected first in live forensics.",
+    "related": ["Memory Forensics", "RAM Analysis", "Live Acquisition"],
+    "category": "Technical"
+  },
+  {
+    "term": "E01 Format",
+    "definition": "Expert Witness Format - a forensic image format that includes compression, metadata, case information, hash values, and error correction. Industry standard created by Guidance Software (now OpenText).",
+    "related": ["Forensic Image", "EWF", "Acquisition"],
+    "category": "Technical"
+  },
+  {
+    "term": "MACB Timestamps",
+    "definition": "Four critical timestamps in NTFS: Modified (content changed), Accessed (file read), Changed (MFT entry modified), Birth/Created (file creation). Essential for timeline analysis.",
+    "related": ["NTFS", "Timeline Analysis", "Metadata"],
+    "category": "File Systems"
+  },
+  {
+    "term": "Alternate Data Stream (ADS)",
+    "definition": "NTFS feature allowing multiple data streams per file. Originally for Macintosh compatibility, now frequently exploited by malware to hide malicious code invisible to standard directory listings.",
+    "related": ["NTFS", "Hidden Data", "Malware Analysis"],
+    "category": "File Systems"
+  },
+  {
+    "term": "Registry Hive",
+    "definition": "A group of Windows Registry keys, subkeys, and values stored in binary files (SAM, SYSTEM, SOFTWARE, NTUSER.DAT). Contains critical artifacts: user activity, USB devices, program execution, network history.",
+    "related": ["Windows Forensics", "Artifacts", "User Activity"],
+    "category": "Operating Systems"
+  },
+  {
+    "term": "Prefetch Files",
+    "definition": "Windows optimization feature (.pf files in C:\\Windows\\Prefetch) that records program execution details including run count, last execution time, and loaded files. Valuable for program execution analysis.",
+    "related": ["Windows Forensics", "Program Execution", "Artifacts"],
+    "category": "Operating Systems"
+  },
+  {
+    "term": "LBA (Logical Block Addressing)",
+    "definition": "Modern method of addressing data blocks on storage devices using simple linear numbering (0, 1, 2...) instead of Cylinder-Head-Sector geometry. Simplifies forensic imaging and analysis.",
+    "related": ["HDD", "SSD", "Disk Geometry"],
+    "category": "Storage"
+  },
+  {
+    "term": "TRIM Command",
+    "definition": "SSD optimization command that immediately marks deleted data blocks as unused, allowing instant erasure. Catastrophic for forensics as deleted data becomes unrecoverable within seconds.",
+    "related": ["SSD", "Data Recovery", "Deleted Files"],
+    "category": "Storage"
+  },
+  {
+    "term": "Wear Leveling",
+    "definition": "SSD technique distributing write operations across all NAND flash blocks to prevent premature failure. Makes data locations unpredictable and complicates forensic recovery.",
+    "related": ["SSD", "Flash Memory", "Data Recovery"],
+    "category": "Storage"
+  },
+  {
+    "term": "Incident Response",
+    "definition": "Organized approach to addressing and managing the aftermath of a security breach or cyberattack. Phases: Preparation, Identification, Containment, Eradication, Recovery, Lessons Learned.",
+    "related": ["Cybersecurity", "Forensic Process", "Breach Investigation"],
+    "category": "Process"
+  },
+  {
+    "term": "Indicator of Compromise (IoC)",
+    "definition": "Forensic artifact indicating probable system intrusion: malicious IP addresses, file hashes, registry keys, domain names, or behavioral patterns. Used for threat detection and threat hunting.",
+    "related": ["Malware Analysis", "Threat Intelligence", "Incident Response"],
+    "category": "Security"
+  },
+  {
+    "term": "Memory Dump",
+    "definition": "Complete capture of system RAM contents at a specific point in time. Contains processes, network connections, encryption keys, passwords, and running malware. Analyzed with tools like Volatility.",
+    "related": ["Memory Forensics", "Volatile Data", "RAM Analysis"],
+    "category": "Technical"
+  },
+  {
+    "term": "Timeline Analysis",
+    "definition": "Reconstructing sequence of events by correlating timestamps from multiple sources: file systems, logs, memory, network traffic. Essential for understanding attack progression and user activity.",
+    "related": ["Investigation", "MACB Timestamps", "Event Correlation"],
+    "category": "Process"
+  },
+  {
+    "term": "Exif Metadata",
+    "definition": "Exchangeable Image File Format data embedded in photos containing camera model, GPS coordinates, timestamp, software used, and camera settings. Critical for photo authentication and location tracking.",
+    "related": ["Mobile Forensics", "Geolocation", "Metadata"],
+    "category": "Technical"
+  },
+  {
+    "term": "Shadow Copy",
+    "definition": "Windows Volume Shadow Copy Service (VSS) creates point-in-time snapshots of volumes. Can preserve deleted files, previous file versions, and system state. Valuable for recovery and timeline analysis.",
+    "related": ["Windows Forensics", "Data Recovery", "Backup"],
+    "category": "Operating Systems"
+  },
+  {
+    "term": "Packet Capture (PCAP)",
+    "definition": "Recording network traffic at the packet level using tools like Wireshark or tcpdump. Stored in PCAP format for analysis of protocols, malware communication, data exfiltration, and attack vectors.",
+    "related": ["Network Forensics", "Wireshark", "Traffic Analysis"],
+    "category": "Network"
+  },
+  {
+    "term": "Steganography",
+    "definition": "Hiding data within other files (images, audio, video) to conceal its existence. Attackers use it for covert communication and data exfiltration. Detection requires specialized tools and statistical analysis.",
+    "related": ["Hidden Data", "Covert Communication", "Anti-Forensics"],
+    "category": "Security"
+  },
+  {
+    "term": "Timestomping",
+    "definition": "Anti-forensic technique of modifying file timestamps to hide true creation, modification, or access times. Tools like TimeStomp can alter MACB timestamps. Detectable by comparing multiple timestamp sources in NTFS.",
+    "related": ["Anti-Forensics", "MACB Timestamps", "NTFS"],
+    "category": "Security"
+  },
+  {
+    "term": "RAM Slack",
+    "definition": "Unused space between the end of a file's logical size and the end of the last sector assigned to it in memory. Can contain remnants of data from RAM at time of file creation. Less common in modern systems.",
+    "related": ["Slack Space", "Data Recovery", "Hidden Data"],
+    "category": "Technical"
+  },
+  {
+    "term": "Rootkit",
+    "definition": "Malware designed to hide the presence of processes, files, or network connections from the operating system. Kernel-mode rootkits operate at privileged level, making detection extremely difficult.",
+    "related": ["Malware Analysis", "Hidden Processes", "Kernel-Mode"],
+    "category": "Security"
+  },
+  {
+    "term": "YARA Rules",
+    "definition": "Pattern matching tool used to identify and classify malware samples. Rules define text or binary patterns that characterize malware families. Essential for automated threat detection and IOC matching.",
+    "related": ["Malware Analysis", "Indicator of Compromise", "Threat Intelligence"],
+    "category": "Tools"
+  },
+  {
+    "term": "Process Injection",
+    "definition": "Malware technique of inserting code into the address space of another running process. Common methods: DLL injection, process hollowing, APC injection. Allows malware to evade detection and inherit privileges.",
+    "related": ["Malware Analysis", "Memory Forensics", "Evasion Techniques"],
+    "category": "Security"
+  },
+  {
+    "term": "Cold Boot Attack",
+    "definition": "Attacking technique that exploits RAM data remanence. Memory contents persist for seconds to minutes after power loss when cooled. Allows extraction of encryption keys and sensitive data from powered-off systems.",
+    "related": ["Memory Forensics", "Encryption", "Physical Security"],
+    "category": "Security"
+  },
+  {
+    "term": "Hibernation File",
+    "definition": "Windows file (hiberfil.sys) containing compressed RAM contents when system hibernates. Forensically valuable as it preserves complete memory state including processes, network connections, and encryption keys.",
+    "related": ["Memory Forensics", "Windows Forensics", "Volatile Data"],
+    "category": "Operating Systems"
+  },
+  {
+    "term": "Jump List",
+    "definition": "Windows 7+ feature tracking recently accessed files per application. Stored in AutomaticDestinations and CustomDestinations folders. Contains file paths, access times, and application-specific data.",
+    "related": ["Windows Forensics", "User Activity", "Artifacts"],
+    "category": "Operating Systems"
+  },
+  {
+    "term": "SRUM",
+    "definition": "System Resource Usage Monitor - Windows database tracking application execution, network usage, and resource consumption. Located at C:\\Windows\\System32\\sru\\SRUDB.dat. Valuable for timeline and program execution analysis.",
+    "related": ["Windows Forensics", "Program Execution", "Network Analysis"],
+    "category": "Operating Systems"
+  },
+  {
+    "term": "ShimCache",
+    "definition": "Windows Application Compatibility Cache storing information about executed programs. Registry key: SYSTEM\\CurrentControlSet\\Control\\Session Manager\\AppCompatCache. Tracks program paths and last modification times.",
+    "related": ["Windows Forensics", "Program Execution", "Registry"],
+    "category": "Operating Systems"
+  },
+  {
+    "term": "Amcache.hve",
+    "definition": "Windows registry hive tracking application execution and installation. Located at C:\\Windows\\AppCompat\\Programs\\Amcache.hve. Contains program paths, SHA-1 hashes, execution timestamps, and publisher information.",
+    "related": ["Windows Forensics", "Program Execution", "Registry Hive"],
+    "category": "Operating Systems"
+  },
+  {
+    "term": "USN Journal",
+    "definition": "NTFS Update Sequence Number Journal ($UsnJrnl) - change log tracking all file system modifications. Records file creation, deletion, renaming, and attribute changes with timestamps. Essential for timeline reconstruction.",
+    "related": ["NTFS", "Timeline Analysis", "File System"],
+    "category": "File Systems"
+  },
+  {
+    "term": "$LogFile",
+    "definition": "NTFS transaction log used for crash recovery. Contains records of file system operations that may not have completed. Forensically valuable for recovering recently deleted files and understanding recent activity.",
+    "related": ["NTFS", "Data Recovery", "File System"],
+    "category": "File Systems"
+  },
+  {
+    "term": "$I30",
+    "definition": "NTFS index attribute containing directory listings. Slack space in $I30 can preserve deleted file entries even after the file is removed. Essential for recovering deleted file metadata.",
+    "related": ["NTFS", "Deleted Files", "Metadata"],
+    "category": "File Systems"
+  },
+  {
+    "term": "APFS Snapshot",
+    "definition": "Point-in-time read-only state of an APFS volume. macOS uses snapshots for Time Machine and system updates. Forensically valuable for accessing historical file system states and recovering deleted data.",
+    "related": ["APFS", "macOS Forensics", "Data Recovery"],
+    "category": "File Systems"
+  },
+  {
+    "term": "SQLite Database",
+    "definition": "Self-contained database format widely used by applications and mobile devices. Stores browser history, messages, app data. Forensic analysis with SQLite Browser or specialized parsers. Check for WAL files (Write-Ahead Log).",
+    "related": ["Mobile Forensics", "Browser Forensics", "Database Analysis"],
+    "category": "Technical"
+  },
+  {
+    "term": "Property List (plist)",
+    "definition": "macOS/iOS configuration file format storing application settings and data. Binary or XML format. Analyzed with plutil or plist editors. Contains user preferences, app configurations, and forensic artifacts.",
+    "related": ["macOS Forensics", "iOS Forensics", "Configuration Files"],
+    "category": "Operating Systems"
+  },
+  {
+    "term": "ADB (Android Debug Bridge)",
+    "definition": "Command-line tool for communicating with Android devices. Used in forensics for logical acquisition, shell access, app data extraction, and log collection. Requires USB debugging enabled.",
+    "related": ["Mobile Forensics", "Android Forensics", "Acquisition"],
+    "category": "Tools"
+  },
+  {
+    "term": "iTunes Backup",
+    "definition": "iOS device backup created by iTunes/Finder. Contains app data, settings, messages, call history. May be encrypted with password. Stored locally and can be analyzed with forensic tools without device.",
+    "related": ["iOS Forensics", "Mobile Forensics", "Backup Analysis"],
+    "category": "Technical"
+  },
+  {
+    "term": "CloudTrail",
+    "definition": "AWS service logging API calls and account activity. Records who did what, when, and from where. Essential for cloud forensic investigations. Logs stored in S3, queryable with Athena.",
+    "related": ["Cloud Forensics", "AWS", "Audit Logs"],
+    "category": "Cloud"
+  },
+  {
+    "term": "VPC Flow Logs",
+    "definition": "AWS network traffic logs capturing IP traffic to/from network interfaces. Records source/destination IPs, ports, protocol, bytes. Used for network forensics and data exfiltration detection.",
+    "related": ["Cloud Forensics", "Network Forensics", "AWS"],
+    "category": "Cloud"
+  },
+  {
+    "term": "Credential Dumping",
+    "definition": "Extracting authentication credentials from memory or storage. Tools: Mimikatz (Windows passwords), hashdump (Linux shadow), KeyChain (macOS). Common post-exploitation technique for lateral movement.",
+    "related": ["Memory Forensics", "Incident Response", "Privilege Escalation"],
+    "category": "Security"
+  },
+  {
+    "term": "Lateral Movement",
+    "definition": "Attacker technique of moving from one compromised system to others within a network. Methods: PsExec, WMI, RDP, stolen credentials. Detected through authentication logs, process creation, and network traffic.",
+    "related": ["Incident Response", "Network Forensics", "Windows Forensics"],
+    "category": "Security"
+  },
+  {
+    "term": "Command and Control (C2)",
+    "definition": "Communication channel between compromised system and attacker's server. Malware receives commands and exfiltrates data via C2. Detection methods: network traffic analysis, DNS monitoring, firewall logs.",
+    "related": ["Malware Analysis", "Network Forensics", "Incident Response"],
+    "category": "Security"
+  }
+]

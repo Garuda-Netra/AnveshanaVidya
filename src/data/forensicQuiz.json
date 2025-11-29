@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "question": "What is the FIRST step in any digital forensic investigation?",
+    "options": [
+      "A) Analyze the evidence",
+      "B) Create a forensic image of the storage media",
+      "C) Search for malware",
+      "D) Interview the suspect"
+    ],
+    "correct": 1,
+    "explanation": "Creating a forensic image ensures evidence preservation and maintains chain of custody. Analysis should NEVER be performed on original evidence to prevent modification."
+  },
+  {
+    "id": 2,
+    "question": "Which Windows artifact proves program execution even after the executable is deleted?",
+    "options": [
+      "A) Registry Run keys",
+      "B) Event logs",
+      "C) Prefetch files",
+      "D) Browser history"
+    ],
+    "correct": 2,
+    "explanation": "Prefetch files (.pf) record program execution history, including run count and timestamps. They persist even after the executable is deleted, providing definitive proof of execution."
+  },
+  {
+    "id": 3,
+    "question": "What hash algorithm is MINIMUM recommended for forensic evidence integrity verification?",
+    "options": [
+      "A) MD5",
+      "B) SHA-1",
+      "C) SHA-256",
+      "D) CRC32"
+    ],
+    "correct": 2,
+    "explanation": "SHA-256 is the current standard. MD5 and SHA-1 have known collision vulnerabilities making them unreliable for legal evidence. NIST recommends SHA-256 or higher."
+  },
+  {
+    "id": 4,
+    "question": "In memory forensics, which Volatility plugin identifies hidden rootkit processes?",
+    "options": [
+      "A) pslist",
+      "B) pstree",
+      "C) psscan",
+      "D) modules"
+    ],
+    "correct": 2,
+    "explanation": "psscan performs deep scan of physical memory for EPROCESS structures, revealing processes hidden by rootkits that manipulate process lists seen by pslist."
+  },
+  {
+    "id": 5,
+    "question": "What is the PRIMARY purpose of write-blocking hardware during evidence acquisition?",
+    "options": [
+      "A) Speed up imaging process",
+      "B) Prevent any writes to source drive",
+      "C) Compress the forensic image",
+      "D) Encrypt the evidence"
+    ],
+    "correct": 1,
+    "explanation": "Write blockers prevent ANY modification to original evidence, ensuring forensic soundness. Even mounting a drive without write protection can alter timestamps and metadata."
+  },
+  {
+    "id": 6,
+    "question": "Which registry hive contains USB device connection history?",
+    "options": [
+      "A) HKEY_CURRENT_USER\\Software",
+      "B) HKEY_LOCAL_MACHINE\\SYSTEM",
+      "C) HKEY_USERS\\.DEFAULT",
+      "D) HKEY_LOCAL_MACHINE\\SOFTWARE"
+    ],
+    "correct": 1,
+    "explanation": "SYSTEM hive (specifically SYSTEM\\CurrentControlSet\\Enum\\USBSTOR) contains complete USB device history including vendor, product, serial numbers, and first/last connection times."
+  },
+  {
+    "id": 7,
+    "question": "What does the 'slack space' in a file system contain?",
+    "options": [
+      "A) Deleted file names",
+      "B) Unused space between file end and cluster boundary",
+      "C) Encrypted data",
+      "D) File metadata"
+    ],
+    "correct": 1,
+    "explanation": "Slack space is the unused portion of the last cluster allocated to a file. It may contain remnants of previously deleted files, making it valuable for data recovery and artifact discovery."
+  },
+  {
+    "id": 8,
+    "question": "Which forensic principle states that every contact leaves a trace?",
+    "options": [
+      "A) Chain of custody",
+      "B) Locard's Exchange Principle",
+      "C) Daubert Standard",
+      "D) Best Evidence Rule"
+    ],
+    "correct": 1,
+    "explanation": "Locard's Exchange Principle: 'Every contact leaves a trace.' In digital forensics, this means every interaction with a system leaves artifacts (logs, files, registry changes, network traffic)."
+  },
+  {
+    "id": 9,
+    "question": "What is the difference between logical and physical acquisition of mobile devices?",
+    "options": [
+      "A) Logical is faster, physical is slower",
+      "B) Logical gets active files, physical gets raw storage including deleted data",
+      "C) Logical requires root, physical doesn't",
+      "D) They are the same"
+    ],
+    "correct": 1,
+    "explanation": "Logical acquisition extracts active file system data (like a backup). Physical acquisition creates bit-for-bit copy of storage chip, including unallocated space with deleted files and fragments."
+  },
+  {
+    "id": 10,
+    "question": "In network forensics, what information does analyzing TCP sequence numbers reveal?",
+    "options": [
+      "A) Encrypted content",
+      "B) Potential packet injection or man-in-the-middle attacks",
+      "C) User passwords",
+      "D) File transfers"
+    ],
+    "correct": 1,
+    "explanation": "TCP sequence number anomalies indicate packet injection, session hijacking, or MITM attacks. Normal sequences increment predictably; gaps or duplicates suggest tampering."
+  },
+  {
+    "id": 11,
+    "question": "What metadata is NOT typically found in EXIF data of photos?",
+    "options": [
+      "A) GPS coordinates",
+      "B) Camera make and model",
+      "C) Photographer's fingerprint",
+      "D) Date and time taken"
+    ],
+    "correct": 2,
+    "explanation": "EXIF contains technical metadata (GPS, camera settings, timestamps, software) but NOT biometric data like fingerprints. Some cameras embed owner names if configured."
+  },
+  {
+    "id": 12,
+    "question": "Which Windows Event ID indicates successful user logon?",
+    "options": [
+      "A) 4624",
+      "B) 4625",
+      "C) 4648",
+      "D) 4688"
+    ],
+    "correct": 0,
+    "explanation": "Event ID 4624 = successful logon. 4625 = failed logon. 4648 = explicit credentials used. 4688 = process creation. These are critical for incident timelines."
+  },
+  {
+    "id": 13,
+    "question": "What is 'anti-forensics'?",
+    "options": [
+      "A) Tools investigators use to prevent tampering",
+      "B) Techniques attackers use to hide evidence or impede investigation",
+      "C) Encryption standards",
+      "D) Legal protections for suspects"
+    ],
+    "correct": 1,
+    "explanation": "Anti-forensics includes data wiping, encryption, steganography, timestamp manipulation, and log deletion—techniques designed to destroy evidence or mislead investigators."
+  },
+  {
+    "id": 14,
+    "question": "In email forensics, what header field is MOST reliable for determining true sender?",
+    "options": [
+      "A) From: field",
+      "B) Reply-To: field",
+      "C) Received: headers",
+      "D) Subject: field"
+    ],
+    "correct": 2,
+    "explanation": "Received: headers are added by each mail server in the delivery path and cannot be forged by sender. From: and Reply-To: are easily spoofed. Analyze Received: headers from bottom to top."
+  },
+  {
+    "id": 15,
+    "question": "What is the purpose of 'hashing' in digital forensics?",
+    "options": [
+      "A) Encrypting evidence",
+      "B) Creating unique digital fingerprints to verify integrity",
+      "C) Compressing files",
+      "D) Recovering deleted data"
+    ],
+    "correct": 1,
+    "explanation": "Cryptographic hashes (MD5, SHA-256) create unique fingerprints. Any modification changes the hash, proving tampering. Essential for chain of custody and evidence authenticity."
+  }
+]

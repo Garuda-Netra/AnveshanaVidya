@@ -1,0 +1,152 @@
+[
+  {
+    "name": "dd",
+    "category": "disk",
+    "description": "Creates bit-by-bit forensic disk images with precise sector copying",
+    "output_example": "2048000000 bytes (2.0 GB) copied, 342 s, 6.0 MB/s\nMD5: 5d41402abc4b2a76b9719d911017c592",
+    "explain": "The dd command is fundamental for forensic acquisitions, creating exact binary copies of storage devices. It operates at the sector level, ensuring complete data preservation including deleted files and slack space. Always verify with cryptographic hashes. Warning: dd can overwrite data if source/destination are reversed—use with extreme caution.",
+    "aliases": ["dcfldd", "dc3dd"],
+    "requires_gui": false,
+    "references": ["acquisition", "evidence-integrity"]
+  },
+  {
+    "name": "ewfacquire",
+    "category": "disk",
+    "description": "Creates Expert Witness Format (E01) disk images with compression and metadata",
+    "output_example": "Acquired 500 GB in 3h 42m\nCompression: 38% (310 GB output)\nMD5/SHA1 verified\nCase: 2024-INV-001",
+    "explain": "EWF format (E01) is industry standard for forensic imaging, supporting compression, encryption, and embedded case metadata. Unlike raw dd images, E01 files include hash verification in segments, making them court-admissible and easier to manage. Always document chain of custody in metadata fields.",
+    "aliases": ["ftkimager", "guymager"],
+    "requires_gui": false,
+    "references": ["acquisition", "chain-of-custody"]
+  },
+  {
+    "name": "volatility",
+    "category": "memory",
+    "description": "Extracts processes, network connections, registry hives, and malware from RAM dumps",
+    "output_example": "PID 4921: svchost.exe [HIDDEN]\nCode injection detected\nC2 connection: 203.0.113.87:4444\n12 suspicious DLLs loaded",
+    "explain": "Volatility is the gold standard for memory forensics, revealing runtime state invisible to disk analysis. It detects rootkits, recovers encryption keys, and reconstructs attacker actions from volatile memory. Requires correct OS profile matching. Critical for incident response as memory preserves evidence lost after shutdown.",
+    "aliases": ["vol.py", "volatility3"],
+    "requires_gui": false,
+    "references": ["memory-analysis", "malware-detection", "incident-response"]
+  },
+  {
+    "name": "rekall",
+    "category": "memory",
+    "description": "Advanced memory forensics with live system analysis and cross-platform support",
+    "output_example": "Live acquisition: 16GB RAM\n47 processes enumerated\nKernel modules: 3 unsigned\nNetwork artifacts extracted",
+    "explain": "Rekall extends memory analysis beyond static dumps, supporting live forensics on running systems. It's particularly effective for kernel-level malware detection and cross-platform investigations (Windows/Linux/macOS). Use for scenarios where traditional forensics would alert attackers or when time-critical evidence exists only in RAM.",
+    "aliases": [],
+    "requires_gui": false,
+    "references": ["memory-analysis", "live-forensics"]
+  },
+  {
+    "name": "tcpdump",
+    "category": "network",
+    "description": "Captures and analyzes network packets for traffic reconstruction",
+    "output_example": "15:42:18.234 IP 192.168.1.5.443 > 203.0.113.87.4444: Flags [P.], seq 1:1024\n2847 packets captured\n124 MB written to capture.pcap",
+    "explain": "Tcpdump is essential for network forensics, capturing packet-level data for reconstruction of network activity. Use BPF filters to target specific traffic (e.g., 'tcp port 443'). Always capture to file for detailed analysis with Wireshark later. Note: Encrypted traffic (TLS/SSL) requires key material for decryption.",
+    "aliases": ["windump", "tshark"],
+    "requires_gui": false,
+    "references": ["network-forensics", "packet-analysis"]
+  },
+  {
+    "name": "wireshark",
+    "category": "network",
+    "description": "GUI-based deep packet inspection and protocol analysis",
+    "output_example": "HTTP POST detected: 14.7 GB payload\nDestination: suspicious-domain.com\nFiles extracted: 847 items\nMalware signatures: 3 matches",
+    "explain": "Wireshark provides visual protocol dissection, following TCP streams and extracting transferred files from packet captures. Critical for analyzing C2 communications, data exfiltration, and network-based attacks. Use display filters (not capture filters) for post-capture analysis. Export objects feature recovers files transmitted over HTTP/FTP.",
+    "aliases": ["tshark"],
+    "requires_gui": true,
+    "references": ["network-forensics", "protocol-analysis", "file-extraction"]
+  },
+  {
+    "name": "ngrep",
+    "category": "network",
+    "description": "Network grep for pattern matching in packet payloads",
+    "output_example": "Match found: 'password='\nT 192.168.1.5:51234 -> 10.0.0.1:80 [AP]\nPOST /login HTTP/1.1\npassword=admin123",
+    "explain": "Ngrep applies regex pattern matching to network traffic, ideal for finding credentials, API keys, or specific strings in unencrypted communications. Unlike Wireshark, it's optimized for keyword searching across large captures. Use during incident response to quickly identify data leaks or credential transmission.",
+    "aliases": [],
+    "requires_gui": false,
+    "references": ["network-forensics", "credential-analysis"]
+  },
+  {
+    "name": "netstat",
+    "category": "network",
+    "description": "Displays active network connections and listening ports on live systems",
+    "output_example": "TCP 192.168.1.5:443 203.0.113.87:4444 ESTABLISHED 4921/svchost.exe\nTCP 0.0.0.0:445 LISTENING 4/System\n12 active connections",
+    "explain": "Netstat reveals real-time network activity, crucial for identifying active malware connections or backdoors during incident response. The -anob flags show addresses, ports, owning processes, and disable name resolution. Document all suspicious connections immediately—they're volatile and lost at reboot.",
+    "aliases": ["ss", "netcat"],
+    "requires_gui": false,
+    "references": ["network-forensics", "live-forensics", "malware-detection"]
+  },
+  {
+    "name": "zeek",
+    "category": "network",
+    "description": "Network security monitoring framework generating high-level logs from packets",
+    "output_example": "conn.log: 15847 connections analyzed\nhttp.log: 2847 HTTP transactions\nfiles.log: 234 transferred files\nDNS beaconing detected",
+    "explain": "Zeek (formerly Bro) transforms raw packets into structured logs, ideal for large-scale network forensics. It automatically extracts files, detects anomalies, and generates protocol-specific logs. Unlike Wireshark, Zeek handles terabyte-scale captures efficiently. Use for retrospective analysis of long-duration attacks or data exfiltration campaigns.",
+    "aliases": ["bro"],
+    "requires_gui": false,
+    "references": ["network-forensics", "log-analysis", "file-extraction"]
+  },
+  {
+    "name": "evtxdump",
+    "category": "logs",
+    "description": "Parses Windows Event Logs (EVTX) for security events and system changes",
+    "output_example": "Event 4624: Successful logon\nUser: admin | Time: 02:34:17\nLogon Type: 10 (RemoteInteractive)\n234 failed logon attempts from 203.0.113.87",
+    "explain": "Windows Event Logs document authentication, privilege changes, service installations, and scheduled tasks—critical for timeline reconstruction. Event ID 4624/4625 track successful/failed logons; 4688 shows process creation; 7045 indicates service installation (common persistence). Parse offline to avoid alerting active attackers.",
+    "aliases": ["evtx_dump", "LogParser"],
+    "requires_gui": false,
+    "references": ["logs", "timeline", "windows-forensics"]
+  },
+  {
+    "name": "syslog",
+    "category": "logs",
+    "description": "Analyzes Unix/Linux system logs for authentication and system events",
+    "output_example": "/var/log/auth.log: 847 SSH attempts\nFailed password for root from 203.0.113.87\nSuccessful sudo: user executed /bin/bash\nCron job created: suspicious script",
+    "explain": "Linux/Unix syslog files (auth.log, syslog, kern.log) track user activity, failed authentications, and system events. Critical for detecting unauthorized access, privilege escalation, and persistence mechanisms. Check /var/log/ for rotated logs (auth.log.1, .2.gz). Parse chronologically for attack timeline reconstruction.",
+    "aliases": ["journalctl", "rsyslog"],
+    "requires_gui": false,
+    "references": ["logs", "linux-forensics", "authentication"]
+  },
+  {
+    "name": "chainsaw",
+    "category": "logs",
+    "description": "Rapid Windows Event Log analysis with threat hunting rules",
+    "output_example": "Sigma rule matched: Mimikatz execution\nEvent 4688: lsass.exe accessed by powershell.exe\n3 suspicious process creations\nTimeline: 02:34-02:47 (13 min window)",
+    "explain": "Chainsaw accelerates Windows Event Log analysis by applying SIGMA detection rules, identifying malicious patterns like credential dumping, lateral movement, and persistence. It's optimized for speed across large log sets. Use during incident response to quickly identify attacker TTPs without manual log review.",
+    "aliases": [],
+    "requires_gui": false,
+    "references": ["logs", "threat-hunting", "incident-response"]
+  },
+  {
+    "name": "regedit",
+    "category": "registry",
+    "description": "Parses Windows Registry hives for user activity and system configuration",
+    "output_example": "NTUSER.DAT parsed\nRecent Documents: 234 files\nUSB History: SanDisk 128GB (Last: 12:15:47)\nRun Key: C:\\malware.exe",
+    "explain": "Windows Registry stores critical forensic artifacts: recent files (RecentDocs), USB devices (USBSTOR), program execution (UserAssist), and persistence (Run keys). Parse offline hives (NTUSER.DAT, SYSTEM, SOFTWARE) to avoid detection. Always check HKCU/HKLM Run keys for malware auto-start. Timestamps reveal user behavior timeline.",
+    "aliases": ["regripper", "Registry Explorer"],
+    "requires_gui": true,
+    "references": ["registry", "windows-forensics", "persistence"]
+  },
+  {
+    "name": "regripper",
+    "category": "registry",
+    "description": "Automated Windows Registry parsing with forensic-focused plugins",
+    "output_example": "ShellBags: User accessed C:\\Confidential\\\nUserAssist: program.exe run 47 times\nRecentDocs: 234 files in last 7 days\nNetwork history: 5 WiFi networks",
+    "explain": "RegRipper automates registry artifact extraction with specialized plugins for forensic artifacts like ShellBags (folder access), UserAssist (program execution counts), and typed URLs. It's faster than manual analysis and ensures no artifacts are missed. Critical for Windows timeline reconstruction and user profiling.",
+    "aliases": [],
+    "requires_gui": false,
+    "references": ["registry", "windows-forensics", "artifact-extraction"]
+  },
+  {
+    "name": "shimcache",
+    "category": "registry",
+    "description": "Parses Application Compatibility Cache for program execution evidence",
+    "output_example": "C:\\malware.exe | Last Modified: 2024-11-25 18:34\nC:\\Users\\Admin\\Downloads\\tool.exe\n847 cached executables found",
+    "explain": "ShimCache (AppCompatCache) records all executables run on Windows, including path and last modification time. Unlike Prefetch, it doesn't prove execution time but confirms file presence. Useful when Prefetch is disabled/deleted. Located in SYSTEM\\CurrentControlSet\\Control\\Session Manager\\AppCompatCache. Parse for malware that executed but left no other traces.",
+    "aliases": ["appcompatcache"],
+    "requires_gui": false,
+    "references": ["registry", "windows-forensics", "execution-artifacts"]
+  }
+]

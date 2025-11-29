@@ -1,0 +1,561 @@
+[
+  {
+    "name": "Autopsy",
+    "category": "Suite/Platform",
+    "useCase": "Comprehensive digital forensics platform for analyzing hard drives and mobile devices. Ideal for case management and automated analysis.",
+    "steps": [
+      "Install Autopsy and launch the application",
+      "Create a new case with case name, number, and examiner details",
+      "Add a data source (disk image, local drive, or logical files)",
+      "Select ingest modules: File Type Identification, Extension Mismatch, Exif Parser, Keyword Search, Hash Lookup, etc.",
+      "Run analysis and wait for ingest modules to complete",
+      "Review results in the tree view: Files, Tags, Timeline, Keyword Hits",
+      "Generate comprehensive HTML or Excel report"
+    ],
+    "prosCons": {
+      "pros": [
+        "Free and open-source",
+        "User-friendly GUI",
+        "Extensive plugin ecosystem",
+        "Built-in timeline analysis",
+        "Supports multiple evidence formats"
+      ],
+      "cons": [
+        "Resource-intensive for large datasets",
+        "Limited network forensics capabilities",
+        "Some modules require manual configuration"
+      ]
+    },
+    "example": {
+      "scenario": "Analyzing a disk image from a suspect's laptop to find evidence of data exfiltration",
+      "command": "Via GUI: Case → New Case → Add Data Source → Select E01 image → Enable 'Recent Activity' and 'Keyword Search' modules",
+      "output": "Ingest completed. Found 342 web history entries, 15 keyword hits for 'confidential', 8 USB device connections, and 23 files with timestamps matching incident window.",
+      "interpretation": "Timeline shows USB drive connected 10 minutes before suspicious network traffic. Files matching 'confidential' keyword were accessed and potentially copied to external device."
+    },
+    "asset3D": null
+  },
+  {
+    "name": "FTK Imager",
+    "category": "Acquisition",
+    "useCase": "Industry-standard tool for creating forensic images and previewing evidence without mounting. Essential for evidence preservation.",
+    "steps": [
+      "Launch FTK Imager with administrator privileges",
+      "File → Create Disk Image",
+      "Select source type: Physical Drive, Logical Drive, or Image File",
+      "Choose destination image format: E01 (Expert Witness), DD (Raw), or AFF",
+      "Configure compression level and image fragmentation size",
+      "Add case information and examiner details (embedded in E01)",
+      "Verify image with hash comparison after acquisition"
+    ],
+    "prosCons": {
+      "pros": [
+        "Free tool from AccessData",
+        "Industry-standard E01 format",
+        "Built-in hash verification (MD5, SHA-1)",
+        "Preview mode doesn't alter evidence",
+        "Supports physical and logical acquisition"
+      ],
+      "cons": [
+        "Windows-only",
+        "No automated analysis features",
+        "Large images can take hours"
+      ]
+    },
+    "example": {
+      "scenario": "Creating a forensic image of a 500GB hard drive from a seized computer",
+      "command": "File → Create Disk Image → Physical Drive → \\\\.\\PhysicalDrive1 → E01 format → Compression: 6 → Fragment size: 2GB",
+      "output": "Image creation completed: 500GB → 342GB compressed. MD5: 5d41402abc4b2a76b9719d911017c592. Verification: PASS. Time: 3h 42m.",
+      "interpretation": "Forensically sound image created with 32% compression. Hash verification confirms bit-for-bit accuracy. Evidence preserved without modification to original drive."
+    },
+    "asset3D": null
+  },
+  {
+    "name": "Volatility",
+    "category": "Memory Analysis",
+    "useCase": "Advanced framework for analyzing RAM dumps to uncover running processes, network connections, and malware in memory.",
+    "steps": [
+      "Acquire memory dump using DumpIt, FTK Imager, or WinPMEM",
+      "Identify OS profile: volatility -f memory.raw imageinfo",
+      "List running processes: volatility -f memory.raw --profile=Win10x64 pslist",
+      "Scan for hidden processes: volatility -f memory.raw --profile=Win10x64 psscan",
+      "Extract network connections: volatility -f memory.raw --profile=Win10x64 netscan",
+      "Dump suspicious process: volatility -f memory.raw --profile=Win10x64 procdump -p [PID] -D ./output",
+      "Analyze command history, DLLs, and registry hives as needed"
+    ],
+    "prosCons": {
+      "pros": [
+        "Industry-standard for memory forensics",
+        "Extensive plugin library",
+        "Cross-platform (Windows, Linux, macOS)",
+        "Active development and community",
+        "Can detect rootkits and advanced malware"
+      ],
+      "cons": [
+        "Steep learning curve",
+        "Command-line only",
+        "Requires correct OS profile",
+        "Can be slow on large memory dumps"
+      ]
+    },
+    "example": {
+      "scenario": "Investigating a compromised server with suspected malware injection",
+      "command": "volatility -f server-memory.raw --profile=Win2019x64 malfind",
+      "output": "Process: svchost.exe Pid: 2847 | Address: 0x7ff6a2e0000 | Protection: PAGE_EXECUTE_READWRITE | MZ Header found | Suspicious memory region with embedded PE file",
+      "interpretation": "Detected code injection in svchost.exe. Executable code in unusual memory region with RWX permissions. MZ header indicates injected PE. High confidence malware indicator."
+    },
+    "asset3D": null
+  },
+  {
+    "name": "Wireshark",
+    "category": "Network Forensics",
+    "useCase": "Packet capture and protocol analysis for investigating network-based attacks, data exfiltration, and malware communication.",
+    "steps": [
+      "Capture packets: tshark -i eth0 -w capture.pcap or use Wireshark GUI",
+      "Apply display filters: ip.addr == 192.168.1.100 or http.request.method == POST",
+      "Follow TCP streams: Right-click packet → Follow → TCP Stream",
+      "Extract files: File → Export Objects → HTTP/SMB/FTP",
+      "Analyze DNS queries: dns.qry.name contains 'malicious'",
+      "Check for anomalies: Statistics → Protocol Hierarchy, Conversations, Endpoints",
+      "Export filtered packets or specific objects for further analysis"
+    ],
+    "prosCons": {
+      "pros": [
+        "Free and open-source",
+        "Deep protocol analysis (1000+ protocols)",
+        "Powerful display filters",
+        "Can decrypt TLS with keys",
+        "Cross-platform"
+      ],
+      "cons": [
+        "Overwhelming for beginners",
+        "Large captures can be slow",
+        "Limited automated threat detection",
+        "Can't decrypt without keys"
+      ]
+    },
+    "example": {
+      "scenario": "Investigating potential data exfiltration via HTTP POST requests",
+      "command": "Display filter: http.request.method == POST && ip.dst != 192.168.0.0/16",
+      "output": "Found 37 POST requests to external IP 203.0.113.45:80. Follow TCP stream shows Base64-encoded payload containing database dump with customer records.",
+      "interpretation": "Confirmed data exfiltration. Internal employee uploaded sensitive database to external server. POST content included 50,000+ customer records. Timestamps correlate with user login."
+    },
+    "asset3D": "network-packet-flow"
+  },
+  {
+    "name": "Sleuth Kit (TSK)",
+    "category": "File System Analysis",
+    "useCase": "Command-line tools for low-level file system analysis, recovering deleted files, and examining disk structures.",
+    "steps": [
+      "Identify file system type: fsstat image.dd",
+      "List files including deleted: fls -r -p image.dd",
+      "Extract file by inode: icat image.dd [inode] > recovered_file",
+      "View file metadata: istat image.dd [inode]",
+      "Search for strings: blkcat image.dd [block] | strings",
+      "Timeline generation: fls -m / -r image.dd > bodyfile; mactime -b bodyfile -d > timeline.csv"
+    ],
+    "prosCons": {
+      "pros": [
+        "Low-level access to file systems",
+        "Works with raw images",
+        "Scriptable and automatable",
+        "Cross-platform",
+        "Foundation for Autopsy"
+      ],
+      "cons": [
+        "Command-line only",
+        "Requires file system knowledge",
+        "No GUI",
+        "Manual interpretation needed"
+      ]
+    },
+    "example": {
+      "scenario": "Recovering a deleted document from NTFS volume",
+      "command": "fls -r -d image.dd | grep 'document.docx'; icat image.dd 128-144-3 > recovered_document.docx",
+      "output": "r/r * 128-144-3: document.docx (deleted). File successfully recovered: 247KB, MD5: a3c2f1b...",
+      "interpretation": "Deleted file found in MFT entry 128. Inode points to clusters 144-3. Content fully recovered as file wasn't overwritten. File can be opened and analyzed."
+    },
+    "asset3D": null
+  },
+  {
+    "name": "AXIOM",
+    "category": "Mobile Forensics",
+    "useCase": "Commercial tool for comprehensive mobile device forensics including app data, deleted messages, and cloud artifacts.",
+    "steps": [
+      "Connect device via USB or load backup/image",
+      "AXIOM Process: Select artifacts (messages, calls, apps, location)",
+      "Quick scan for active data or Deep scan for deleted items",
+      "AXIOM Examine: Review timeline, conversations, media",
+      "Filter by date range, keyword, or artifact type",
+      "Tag relevant evidence and add examiner notes",
+      "Generate comprehensive report with exhibits"
+    ],
+    "prosCons": {
+      "pros": [
+        "Supports iOS and Android",
+        "Recovers deleted data",
+        "Parses 300+ apps",
+        "Cloud data integration",
+        "Intuitive UI and reporting"
+      ],
+      "cons": [
+        "Expensive commercial license",
+        "Requires regular updates for new apps",
+        "Some devices require jailbreak/root",
+        "Cloud tokens may expire"
+      ]
+    },
+    "example": {
+      "scenario": "Extracting deleted WhatsApp messages from Android device in custody battle",
+      "command": "AXIOM Process → Android Full File System → Select 'WhatsApp' artifact → Deep Scan enabled",
+      "output": "Recovered 1,247 active messages and 89 deleted messages. Found 34 images in chat cache. GPS coordinates embedded in 12 photos.",
+      "interpretation": "Deleted messages show communication between parties about asset concealment. Metadata confirms messages sent during disputed timeframe. Photos contain EXIF location data."
+    },
+    "asset3D": null
+  },
+  {
+    "name": "Bulk Extractor",
+    "category": "Data Carving",
+    "useCase": "High-speed data extraction tool that scans disk images for emails, URLs, credit cards, and other artifacts without file system parsing.",
+    "steps": [
+      "Run bulk extractor: bulk_extractor -o output_dir image.dd",
+      "Review generated text files: email.txt, url.txt, ccn.txt (credit cards)",
+      "Check histogram files for frequency analysis",
+      "Use -x option to exclude scanners: bulk_extractor -x gps -o output image.dd",
+      "Enable specific scanners: bulk_extractor -e wordlist -o output image.dd",
+      "Analyze results with BEViewer (GUI tool)"
+    ],
+    "prosCons": {
+      "pros": [
+        "Extremely fast (multi-threaded)",
+        "Works on any binary data",
+        "No file system needed",
+        "Automatically handles compression",
+        "Finds data in unallocated space"
+      ],
+      "cons": [
+        "Generates many false positives",
+        "No context for found data",
+        "Requires manual review",
+        "Large output for big images"
+      ]
+    },
+    "example": {
+      "scenario": "Searching for credit card numbers and email addresses in disk image",
+      "command": "bulk_extractor -o /case/output /evidence/suspect_drive.E01",
+      "output": "Processed 500GB in 42 minutes. Found: 2,847 email addresses (email.txt), 93 credit card numbers (ccn.txt), 15,234 URLs (url.txt). Histogram shows top domains contacted.",
+      "interpretation": "Multiple credit cards found in unallocated space suggest deleted browser cache. Email addresses correlate with suspect's known associates. URL histogram reveals dark web marketplace access."
+    },
+    "asset3D": "data-carving-visualization"
+  },
+  {
+    "name": "EnCase Forensic",
+    "category": "Suite/Platform",
+    "useCase": "Industry-leading commercial forensic suite for enterprise investigations, litigation support, and incident response.",
+    "steps": [
+      "Launch EnCase and create new case with case metadata",
+      "Add evidence files: physical drives, logical images, or network shares",
+      "Configure EnCase processor options: hash calculation, signature analysis, email parsing",
+      "Run EnCase processor to index and analyze evidence",
+      "Use Filters and Conditions to search for specific artifacts",
+      "Leverage EnScript automation for repetitive tasks",
+      "Timeline view for chronological event analysis",
+      "Create bookmarks and tags for relevant evidence",
+      "Generate comprehensive court-ready reports"
+    ],
+    "prosCons": {
+      "pros": [
+        "Industry standard in law enforcement",
+        "Legally recognized and court-accepted",
+        "Powerful EnScript scripting engine",
+        "Enterprise-grade stability",
+        "Extensive training and certification programs"
+      ],
+      "cons": [
+        "Very expensive licensing model",
+        "Steep learning curve",
+        "Resource-intensive",
+        "Windows-only application",
+        "Annual maintenance costs"
+      ]
+    },
+    "example": {
+      "scenario": "Large-scale eDiscovery for corporate fraud investigation involving 50TB of email data",
+      "command": "EnCase Enterprise: Add Evidence → Process with Email Parser → Apply keyword filters → Export PST files → Generate production reports",
+      "output": "Processed 2.3M emails across 47 mailboxes. Identified 847 messages containing fraud-related keywords. Extracted 234 attachments matching financial document patterns. Timeline shows email correspondence correlating with suspicious wire transfers.",
+      "interpretation": "Email evidence establishes communication pattern between executives and offshore accounts. Timestamps align with unauthorized transactions. Attachments include falsified invoices and altered financial statements."
+    },
+    "asset3D": null
+  },
+  {
+    "name": "X-Ways Forensics",
+    "category": "Suite/Platform",
+    "useCase": "Powerful and efficient forensic tool known for speed, low resource usage, and advanced features at a reasonable price point.",
+    "steps": [
+      "Create case and add evidence (image files or physical devices)",
+      "Refine Volume Snapshot (RVS) to populate file system data",
+      "Run Simultaneous Search for keywords across all evidence",
+      "Use File Header Signature Search for file carving",
+      "Review Registry Report for Windows artifacts",
+      "Analyze file system slack and free space",
+      "Generate detailed reports with selected evidence items"
+    ],
+    "prosCons": {
+      "pros": [
+        "Extremely fast and efficient",
+        "Low memory footprint",
+        "Affordable perpetual licensing",
+        "Portable (runs from USB)",
+        "Direct disk access",
+        "Active community support"
+      ],
+      "cons": [
+        "Interface can be overwhelming for beginners",
+        "Limited built-in automation",
+        "Manual configuration required",
+        "Documentation could be more extensive",
+        "No Mac version"
+      ]
+    },
+    "example": {
+      "scenario": "Rapid triage of 20 computers seized in cybercrime raid",
+      "command": "X-Ways: Batch add 20 evidence items → RVS all → Simultaneous Search for crypto wallet keywords → Export hits → Generate triage report",
+      "output": "Completed triage in 3.5 hours. Found cryptocurrency wallets on 7 systems, dark web browser artifacts on 12 systems, and communication logs on 15 systems. Prioritized 4 systems for deep analysis.",
+      "interpretation": "Efficient triage identified high-value targets. Systems with wallet files and dark web access flagged for immediate forensic imaging. Remaining systems show minimal evidentiary value."
+    },
+    "asset3D": null
+  },
+  {
+    "name": "Cellebrite UFED",
+    "category": "Mobile Forensics",
+    "useCase": "Law enforcement-grade mobile extraction tool supporting physical, logical, and file system acquisition from thousands of devices.",
+    "steps": [
+      "Connect device via USB or use UFED 4PC for computer-based extraction",
+      "Select extraction type: Logical, File System, Physical, or Advanced Logical",
+      "Authenticate if required (passcode, pattern, biometric)",
+      "Start extraction and monitor progress",
+      "Analyze in UFED Physical Analyzer: timeline, messages, calls, apps",
+      "Use Advanced Logical mode for locked iOS devices",
+      "Generate detailed reports with filtered evidence"
+    ],
+    "prosCons": {
+      "pros": [
+        "Supports 1000s of device models",
+        "Physical acquisition capabilities",
+        "Can bypass some lock screens",
+        "Regular updates for new devices",
+        "Cloud data extraction",
+        "Detailed app parsing"
+      ],
+      "cons": [
+        "Extremely expensive ($5,000-$15,000+)",
+        "Requires frequent license renewals",
+        "Some extractions require jailbreak/root",
+        "Ethical concerns around bypass capabilities",
+        "Training required for advanced features"
+      ]
+    },
+    "example": {
+      "scenario": "Extracting data from locked iPhone in homicide investigation",
+      "command": "UFED: Connect iPhone → Advanced Logical Extraction → Wait for passcode bruteforce (if applicable) → Extract all data",
+      "output": "Advanced Logical extraction completed: 3,847 messages, 1,234 photos, 89 videos, 234 call logs, location history with 2,847 GPS points. Found deleted messages recovered from SQLite journal.",
+      "interpretation": "Location data places suspect at crime scene during incident timeframe. Deleted messages show communication with victim 30 minutes before homicide. Photo EXIF data corroborates timeline."
+    },
+    "asset3D": null
+  },
+  {
+    "name": "Magnet AXIOM",
+    "category": "Suite/Platform",
+    "useCase": "Modern forensic platform with strong mobile, computer, and cloud artifact support. User-friendly interface with powerful analytics.",
+    "steps": [
+      "Launch AXIOM Process and create new case",
+      "Add evidence sources: computer images, mobile backups, cloud acquisitions",
+      "Select artifact categories: communications, user activity, media, documents",
+      "Choose processing options: recover deleted data, carve files, analyze media",
+      "Monitor processing in real-time with progress indicators",
+      "Open in AXIOM Examine for analysis and reporting",
+      "Use Connections and Timeline views for relationship analysis",
+      "Apply filters and tags to organize findings",
+      "Generate customizable reports with evidence exhibits"
+    ],
+    "prosCons": {
+      "pros": [
+        "Modern, intuitive interface",
+        "Strong cloud artifact support (iCloud, Google, social media)",
+        "Excellent mobile device parsing",
+        "Magnet.AI for image classification",
+        "Regular artifact updates",
+        "Connections visualization"
+      ],
+      "cons": [
+        "Subscription-based pricing",
+        "Can be resource-intensive",
+        "Some advanced features require add-ons",
+        "Processing can be slow on large datasets",
+        "Limited scripting/automation"
+      ]
+    },
+    "example": {
+      "scenario": "Analyzing cloud data from Google Takeout in employment dispute",
+      "command": "AXIOM Process → Add Evidence → Load Google Takeout .zip → Select Gmail, Drive, Photos, Location History → Process",
+      "output": "Processed 15GB Google Takeout: 28,450 emails, 3,847 Drive files, 12,345 photos, location history spanning 3 years. Timeline shows 847 business hours spent at competitor's office location.",
+      "interpretation": "Email analysis reveals forwarding company documents to personal account. Google Location History shows regular visits to competitor during work hours. Drive contains competitor's proprietary documents."
+    },
+    "asset3D": null
+  },
+  {
+    "name": "Rekall",
+    "category": "Memory Analysis",
+    "useCase": "Advanced memory forensics framework supporting Windows, Linux, and macOS memory analysis with live memory acquisition.",
+    "steps": [
+      "Acquire memory dump or use live acquisition mode",
+      "Launch Rekall: rekall -f memory.dmp",
+      "Identify profile: imageinfo plugin",
+      "List processes: pslist or pstree for hierarchy",
+      "Scan for hidden processes: psscan",
+      "Analyze network connections: netstat or netscan",
+      "Examine loaded modules: modules or lsmod",
+      "Dump suspicious processes or memory regions: procdump or vaddump",
+      "Investigate registry hives: hivelist and printkey"
+    ],
+    "prosCons": {
+      "pros": [
+        "Fast and efficient",
+        "Live memory analysis capability",
+        "Cross-platform support",
+        "Active development",
+        "Python-based extensibility",
+        "Open source"
+      ],
+      "cons": [
+        "Less mature than Volatility",
+        "Fewer plugins available",
+        "Command-line only",
+        "Documentation gaps",
+        "Smaller community"
+      ]
+    },
+    "example": {
+      "scenario": "Live memory analysis of suspected compromised Linux server",
+      "command": "rekall --live Memory → pslist → netstat → lsmod → check_modules",
+      "output": "Detected suspicious kernel module 'netfilter_backdoor' not in package manager database. Hidden process PID 8472 making outbound connections to 203.0.113.87:4444. Process not visible in standard ps output.",
+      "interpretation": "Rootkit detected: kernel-level backdoor intercepting system calls. Hidden process maintains C2 connection to attacker infrastructure. Standard detection tools compromised by rootkit."
+    },
+    "asset3D": null
+  },
+  {
+    "name": "Redline",
+    "category": "Memory Analysis",
+    "useCase": "Free incident response tool from Mandiant for memory and file analysis, IOC detection, and threat hunting.",
+    "steps": [
+      "Use Mandiant Redline Collector to acquire memory and triage data",
+      "Import collected data into Redline for analysis",
+      "Review Timeline for chronological event sequence",
+      "Analyze Processes, Services, and Network Connections",
+      "Use Mandiant IOC Editor to create custom indicators",
+      "Run IOC searches across collected data",
+      "Investigate File Download History and Browser Artifacts",
+      "Generate investigation reports with findings"
+    ],
+    "prosCons": {
+      "pros": [
+        "Free tool from leading IR firm",
+        "GUI-based interface",
+        "Built-in IOC detection",
+        "Good for Windows analysis",
+        "Integrated with Mandiant threat intelligence",
+        "Lightweight collector"
+      ],
+      "cons": [
+        "Windows-only",
+        "Limited compared to commercial tools",
+        "Requires Windows for analysis",
+        "No scripting capability",
+        "Mandiant branding (now Google)"
+      ]
+    },
+    "example": {
+      "scenario": "Hunting for APT indicators across 50 endpoints in enterprise network",
+      "command": "Deploy Redline Collector via GPO → Import all data → Load Mandiant APT29 IOC → Run search",
+      "output": "IOC hits on 7 endpoints: Suspicious registry keys, known malware file hashes, C2 domain in DNS cache, scheduled tasks for persistence. Timeline shows initial compromise 47 days ago.",
+      "interpretation": "APT29 (Cozy Bear) indicators confirmed. Initial compromise via spear-phishing. Lateral movement using stolen credentials. Persistence via scheduled tasks and registry run keys. Data staging detected on file server."
+    },
+    "asset3D": null
+  },
+  {
+    "name": "NetworkMiner",
+    "category": "Network Forensics",
+    "useCase": "Network forensic analysis tool for passive sniffing, PCAP parsing, file extraction, and host discovery.",
+    "steps": [
+      "Open PCAP file or start live capture",
+      "Review Hosts tab for discovered systems and OS fingerprinting",
+      "Check Files tab for extracted files from network traffic",
+      "Examine Images tab for pictures transmitted over network",
+      "Review Messages tab for email and chat conversations",
+      "Analyze Credentials tab for captured username/password pairs",
+      "Use Sessions tab to reconstruct TCP streams",
+      "Export findings for further analysis or reporting"
+    ],
+    "prosCons": {
+      "pros": [
+        "User-friendly GUI",
+        "Automatic file extraction",
+        "OS fingerprinting",
+        "Credential harvesting",
+        "Free version available",
+        "No installation required (portable)"
+      ],
+      "cons": [
+        "Windows-only",
+        "Professional version required for advanced features",
+        "Limited protocol support vs Wireshark",
+        "Can be slow with very large PCAPs",
+        "No packet crafting/injection"
+      ]
+    },
+    "example": {
+      "scenario": "Analyzing network traffic capture from suspected data breach",
+      "command": "NetworkMiner: Open capture.pcap → Review Hosts → Check Files tab → Export extracted files",
+      "output": "Discovered 23 hosts. Extracted 847 files including 234 images, 89 documents, 45 executables. Credentials tab shows 12 cleartext username/password pairs. FTP session contained database dump file.",
+      "interpretation": "Attacker exfiltrated data via FTP. Captured credentials include admin accounts. Extracted files contain customer database, source code, and confidential documents. Host fingerprinting identifies attacker system as Kali Linux."
+    },
+    "asset3D": "network-packet-flow"
+  },
+  {
+    "name": "KAPE",
+    "category": "Triage",
+    "useCase": "Triage tool for rapidly collecting forensic artifacts from Windows systems for later analysis. Ideal for incident response.",
+    "steps": [
+      "Run KAPE with administrator privileges",
+      "Select Target modules: registry, event logs, browser history, etc.",
+      "Configure Module processing: parse with tools like RegRipper, EvtxExplorer",
+      "Specify output directory (preferably external USB)",
+      "Execute collection and wait for completion",
+      "Transfer collected data to analysis workstation",
+      "Process with forensic tools (Autopsy, X-Ways, Timeline Explorer)"
+    ],
+    "prosCons": {
+      "pros": [
+        "Extremely fast collection (<5 minutes)",
+        "Free and open source",
+        "Modular and extensible",
+        "CLI and GUI versions",
+        "Regular updates for new artifacts",
+        "Minimal footprint on target system"
+      ],
+      "cons": [
+        "Windows artifacts only",
+        "No built-in analysis (collection only)",
+        "Requires admin privileges",
+        "Learning curve for module creation",
+        "Command-line focused"
+      ]
+    },
+    "example": {
+      "scenario": "Rapid triage of compromised executive laptop before sending to lab",
+      "command": "kape.exe --tsource C: --tdest E:\\KAPE_Collection --target !SANS_Triage --mdest E:\\KAPE_Processing --module !EZParser",
+      "output": "Collected in 4m 32s: Registry hives (87MB), Event logs (234MB), Browser data (456MB), Prefetch (23MB), recent files, USB history, network artifacts. Modules parsed 847 forensic artifacts.",
+      "interpretation": "Timeline shows initial compromise via malicious PDF. Browser history reveals visits to phishing site. USB history shows external drive connected 10 minutes before suspicious network traffic. Prefetch confirms malware execution."
+    },
+    "asset3D": null
+  }
+]

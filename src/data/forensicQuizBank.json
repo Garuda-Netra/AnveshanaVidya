@@ -1,0 +1,342 @@
+[
+  {
+    "id": 1,
+    "tier": "foundation",
+    "question": "Which hash algorithm produces a 256-bit digest and is commonly used for forensic image verification?",
+    "options": [
+      "A) MD5",
+      "B) SHA-1",
+      "C) SHA-256",
+      "D) CRC32"
+    ],
+    "correct": 2,
+    "rationale": "SHA-256 produces a 256-bit (32-byte) hash and is the current industry standard for verifying forensic images. MD5 (128-bit) and SHA-1 (160-bit) are considered cryptographically weak. CRC32 is a checksum, not a cryptographic hash.",
+    "references": {
+      "module_id": "hash-integrity",
+      "case_id": null
+    }
+  },
+  {
+    "id": 2,
+    "tier": "foundation",
+    "question": "What does the acronym 'DFIR' stand for?",
+    "options": [
+      "A) Digital Forensic Incident Response",
+      "B) Data File Integrity Review",
+      "C) Disk Forensics and Image Recovery",
+      "D) Distributed Firewall Intrusion Report"
+    ],
+    "correct": 0,
+    "rationale": "DFIR stands for Digital Forensic Incident Response, encompassing both investigative analysis and active response to security events.",
+    "references": {
+      "module_id": "fundamentals",
+      "case_id": null
+    }
+  },
+  {
+    "id": 3,
+    "tier": "foundation",
+    "question": "Which file system is most commonly found on modern Windows systems?",
+    "options": [
+      "A) FAT32",
+      "B) ext4",
+      "C) NTFS",
+      "D) HFS+"
+    ],
+    "correct": 2,
+    "rationale": "NTFS (New Technology File System) is the default file system for Windows since Windows XP. FAT32 is legacy, ext4 is Linux, and HFS+ is macOS.",
+    "references": {
+      "module_id": "file-systems",
+      "case_id": null
+    }
+  },
+  {
+    "id": 4,
+    "tier": "foundation",
+    "question": "What is the primary purpose of creating a forensic image?",
+    "options": [
+      "A) To compress data for storage",
+      "B) To create a bit-for-bit copy while preserving evidence integrity",
+      "C) To encrypt the original evidence",
+      "D) To convert the disk to a virtual machine"
+    ],
+    "correct": 1,
+    "rationale": "A forensic image is a bit-for-bit (sector-by-sector) copy of storage media that preserves all data including deleted files and slack space. This maintains chain of custody and allows analysis without modifying original evidence.",
+    "references": {
+      "module_id": "acquisition",
+      "case_id": null
+    }
+  },
+  {
+    "id": 5,
+    "tier": "foundation",
+    "question": "Which Windows registry hive contains user-specific configuration data?",
+    "options": [
+      "A) HKEY_LOCAL_MACHINE",
+      "B) HKEY_CURRENT_USER",
+      "C) HKEY_CLASSES_ROOT",
+      "D) HKEY_CURRENT_CONFIG"
+    ],
+    "correct": 1,
+    "rationale": "HKEY_CURRENT_USER (HKCU) stores settings specific to the currently logged-in user. HKLM contains system-wide settings, HKCR stores file associations, and HKCC holds hardware profile data.",
+    "references": {
+      "module_id": "os-forensics",
+      "case_id": null
+    }
+  },
+  {
+    "id": 6,
+    "tier": "triage",
+    "question": "During triage of a compromised Windows host, which Volatility plugin identifies potentially injected code in running processes?",
+    "options": [
+      "A) pslist",
+      "B) malfind",
+      "C) filescan",
+      "D) netscan"
+    ],
+    "correct": 1,
+    "rationale": "The malfind plugin detects hidden or injected code by scanning process memory for regions with suspicious protections (e.g., PAGE_EXECUTE_READWRITE) and no associated file mapping.",
+    "references": {
+      "module_id": "memory-forensics",
+      "case_id": "ransomware-investigation"
+    }
+  },
+  {
+    "id": 7,
+    "tier": "triage",
+    "question": "An analyst discovers base64-encoded PowerShell commands in Windows event logs. Which Event ID typically records PowerShell script block logging?",
+    "options": [
+      "A) 4624",
+      "B) 4688",
+      "C) 4104",
+      "D) 7045"
+    ],
+    "correct": 2,
+    "rationale": "Event ID 4104 records PowerShell script block logging, capturing the full text of executed scripts. 4624 is logon events, 4688 is process creation, and 7045 is service installation.",
+    "references": {
+      "module_id": "os-forensics",
+      "case_id": "apt-intrusion"
+    }
+  },
+  {
+    "id": 8,
+    "tier": "triage",
+    "question": "Which network artifact would most directly reveal DNS tunneling activity?",
+    "options": [
+      "A) Excessive HTTPS traffic to CDN endpoints",
+      "B) Large TXT record queries to unusual domains",
+      "C) Increased ICMP echo requests",
+      "D) Multiple failed TCP connections on port 445"
+    ],
+    "correct": 1,
+    "rationale": "DNS tunneling often uses TXT records to exfiltrate data due to their larger payload capacity. Unusually large or frequent TXT queries to non-standard domains are strong indicators.",
+    "references": {
+      "module_id": "network-forensics",
+      "case_id": "data-exfiltration"
+    }
+  },
+  {
+    "id": 9,
+    "tier": "triage",
+    "question": "When analyzing a suspicious email header, which field indicates the actual sending mail server?",
+    "options": [
+      "A) From:",
+      "B) Reply-To:",
+      "C) Received: (first entry from bottom)",
+      "D) X-Originating-IP:"
+    ],
+    "correct": 2,
+    "rationale": "The Received headers are added by each mail server in the delivery chain. Reading from bottom to top, the first Received header shows the originating server. From and Reply-To can be spoofed.",
+    "references": {
+      "module_id": "email-forensics",
+      "case_id": "phishing-campaign"
+    }
+  },
+  {
+    "id": 10,
+    "tier": "triage",
+    "question": "Which Windows artifact tracks recently accessed files and folders for a user?",
+    "options": [
+      "A) Prefetch files",
+      "B) Jump Lists",
+      "C) ShellBags",
+      "D) Amcache"
+    ],
+    "correct": 1,
+    "rationale": "Jump Lists maintain recent and pinned items per application, providing a timeline of user file access. Prefetch tracks application execution, ShellBags track folder browsing, and Amcache records application installations.",
+    "references": {
+      "module_id": "os-forensics",
+      "case_id": null
+    }
+  },
+  {
+    "id": 11,
+    "tier": "deep-dive",
+    "question": "During analysis of an NTFS Master File Table ($MFT), you discover a file with a resident $DATA attribute. What does this indicate?",
+    "options": [
+      "A) The file is encrypted with EFS",
+      "B) The file content is stored directly within the MFT record",
+      "C) The file has been marked for deletion",
+      "D) The file is a symbolic link"
+    ],
+    "correct": 1,
+    "rationale": "When a file is small enough (typically under ~700 bytes), NTFS stores the file content directly in the MFT record as a resident attribute, eliminating the need for separate cluster allocation.",
+    "references": {
+      "module_id": "file-systems",
+      "case_id": null
+    }
+  },
+  {
+    "id": 12,
+    "tier": "deep-dive",
+    "question": "An attacker uses process hollowing to inject malicious code. Which sequence of API calls is characteristic of this technique?",
+    "options": [
+      "A) CreateProcess → VirtualAllocEx → WriteProcessMemory",
+      "B) CreateProcess (suspended) → NtUnmapViewOfSection → VirtualAllocEx → WriteProcessMemory → ResumeThread",
+      "C) LoadLibrary → GetProcAddress → CreateRemoteThread",
+      "D) OpenProcess → VirtualProtect → memcpy"
+    ],
+    "correct": 1,
+    "rationale": "Process hollowing creates a process in suspended state, unmaps the legitimate image, allocates new memory for malicious code, writes the payload, and resumes execution. This allows malware to masquerade as a legitimate process.",
+    "references": {
+      "module_id": "malware-analysis",
+      "case_id": "ransomware-investigation"
+    }
+  },
+  {
+    "id": 13,
+    "tier": "deep-dive",
+    "question": "When carving files from unallocated space, you encounter a JPEG file. Which hex signature marks the end of a valid JPEG?",
+    "options": [
+      "A) 00 00 00 00",
+      "B) FF D9",
+      "C) 50 4B 05 06",
+      "D) 00 00 01 BA"
+    ],
+    "correct": 1,
+    "rationale": "JPEG files end with the EOI (End of Image) marker: FF D9. This footer signature is essential for file carving to determine where the JPEG data terminates.",
+    "references": {
+      "module_id": "file-carving",
+      "case_id": "media-recovery"
+    }
+  },
+  {
+    "id": 14,
+    "tier": "deep-dive",
+    "question": "You are analyzing memory from a Linux system and need to identify loaded kernel modules that may be rootkits. Which Volatility plugin is most appropriate?",
+    "options": [
+      "A) linux_pslist",
+      "B) linux_lsmod",
+      "C) linux_bash",
+      "D) linux_netstat"
+    ],
+    "correct": 1,
+    "rationale": "The linux_lsmod plugin lists loaded kernel modules, which is essential for detecting kernel-level rootkits that may hide their presence from userspace tools like lsmod.",
+    "references": {
+      "module_id": "memory-forensics",
+      "case_id": null
+    }
+  },
+  {
+    "id": 15,
+    "tier": "deep-dive",
+    "question": "During a web server compromise investigation, you find evidence of a SQL injection attack. Which log entry pattern most clearly indicates successful data exfiltration via UNION-based injection?",
+    "options": [
+      "A) Multiple 404 errors with encoded path traversal",
+      "B) GET requests containing 'UNION SELECT' with incrementing column counts",
+      "C) POST requests with abnormally large Content-Length",
+      "D) Repeated requests to /admin with different User-Agent strings"
+    ],
+    "correct": 1,
+    "rationale": "UNION-based SQL injection requires matching the column count of the original query. Attackers typically increment column counts (UNION SELECT 1,2,3...) until the query succeeds, leaving a distinctive pattern in logs.",
+    "references": {
+      "module_id": "web-forensics",
+      "case_id": "web-server-breach"
+    }
+  },
+  {
+    "id": 16,
+    "tier": "foundation",
+    "question": "What is the standard format for forensic disk images that supports compression and case metadata?",
+    "options": [
+      "A) RAW/dd",
+      "B) E01 (EnCase Evidence File)",
+      "C) VMDK",
+      "D) ISO"
+    ],
+    "correct": 1,
+    "rationale": "E01 format supports compression, embedded hash verification, and case metadata. RAW/dd is uncompressed with no metadata. VMDK is for virtual machines, and ISO is for optical media.",
+    "references": {
+      "module_id": "acquisition",
+      "case_id": null
+    }
+  },
+  {
+    "id": 17,
+    "tier": "foundation",
+    "question": "Which principle requires that digital evidence remain unaltered from collection through presentation?",
+    "options": [
+      "A) Defense in depth",
+      "B) Least privilege",
+      "C) Chain of custody",
+      "D) Need to know"
+    ],
+    "correct": 2,
+    "rationale": "Chain of custody documents every person who handled evidence, ensuring integrity from seizure to court presentation. This legal principle is fundamental to evidence admissibility.",
+    "references": {
+      "module_id": "fundamentals",
+      "case_id": null
+    }
+  },
+  {
+    "id": 18,
+    "tier": "triage",
+    "question": "Which Sysmon Event ID indicates a process has created a remote thread in another process?",
+    "options": [
+      "A) Event ID 1",
+      "B) Event ID 3",
+      "C) Event ID 8",
+      "D) Event ID 11"
+    ],
+    "correct": 2,
+    "rationale": "Sysmon Event ID 8 logs CreateRemoteThread operations, commonly used for code injection. Event 1 is process creation, Event 3 is network connection, and Event 11 is file creation.",
+    "references": {
+      "module_id": "os-forensics",
+      "case_id": "apt-intrusion"
+    }
+  },
+  {
+    "id": 19,
+    "tier": "triage",
+    "question": "When analyzing lateral movement, which Windows event indicates a successful NTLM authentication from a remote system?",
+    "options": [
+      "A) Event ID 4624 with Logon Type 10",
+      "B) Event ID 4624 with Logon Type 3",
+      "C) Event ID 4648",
+      "D) Event ID 4672"
+    ],
+    "correct": 1,
+    "rationale": "Event ID 4624 with Logon Type 3 indicates network logon, typical of lateral movement via SMB/NTLM. Type 10 is remote interactive (RDP), 4648 is explicit credential use, and 4672 is special privileges assigned.",
+    "references": {
+      "module_id": "os-forensics",
+      "case_id": "ransomware-investigation"
+    }
+  },
+  {
+    "id": 20,
+    "tier": "deep-dive",
+    "question": "You discover steganography was used to hide data in a PNG image. Which technique examines the least significant bits of pixel values for hidden data?",
+    "options": [
+      "A) Chi-square analysis",
+      "B) Entropy calculation",
+      "C) LSB extraction",
+      "D) Histogram analysis"
+    ],
+    "correct": 2,
+    "rationale": "LSB (Least Significant Bit) extraction directly reads the last bit of each color channel value where data is commonly embedded. Chi-square and histogram analysis detect steganography; LSB extraction recovers the payload.",
+    "references": {
+      "module_id": "steganography",
+      "case_id": "covert-channel"
+    }
+  }
+]

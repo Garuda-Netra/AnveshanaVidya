@@ -1,0 +1,81 @@
+{
+  "categories": {
+    "disk": "Disk imaging, partition analysis, and storage forensics",
+    "memory": "RAM analysis, process extraction, and volatile data recovery",
+    "network": "Packet capture, traffic analysis, and network reconstructions",
+    "logs": "System logs, application logs, and event correlation",
+    "registry": "Windows Registry parsing and artifact extraction",
+    "browser": "Web history, cookies, cache, and browser artifact analysis",
+    "mobile": "iOS/Android forensics, app data, and mobile artifacts",
+    "cloud": "Cloud storage, SaaS forensics, and remote data analysis",
+    "email": "Email forensics, PST/MBOX parsing, and metadata analysis",
+    "artifacts": "OS artifacts, prefetch, shellbags, and timeline reconstruction",
+    "hashing": "File integrity, hash calculation, and verification",
+    "timeline": "Event correlation, super timelines, and chronological analysis",
+    "recovery": "Deleted file recovery, file carving, and data restoration",
+    "dfir-suite": "Comprehensive forensic platforms and automation tools"
+  },
+  "help_index": {
+    "acquisition": ["dd", "ewfacquire", "ftkimager", "guymager", "dd rescue", "dcfldd"],
+    "memory_analysis": ["volatility", "rekall", "memdump", "dumpit", "winpmem"],
+    "network_forensics": ["tcpdump", "wireshark", "zeek", "ngrep", "networkminer"],
+    "log_analysis": ["evtxdump", "syslog", "chainsaw", "logparser", "splunk"],
+    "registry_analysis": ["regedit", "regripper", "shimcache", "amcache", "userassist"],
+    "browser_forensics": ["hindsight", "chrome_parser", "firefox_parser", "browserhistoryview"],
+    "mobile_forensics": ["cellebrite", "oxygen", "andriller", "ileapp", "aleapp"],
+    "file_carving": ["photorec", "scalpel", "foremost", "bulk_extractor", "carve"],
+    "malware_analysis": ["yara", "clamav", "pestudio", "remnux", "floss"],
+    "timeline_creation": ["plaso", "log2timeline", "mactime", "fls", "timeline_explorer"],
+    "hashing": ["md5sum", "sha256sum", "hashdeep", "hashcalc", "ssdeep"],
+    "windows_artifacts": ["prefetch", "shimcache", "amcache", "shellbags", "jumplists"],
+    "linux_artifacts": ["bash_history", "auth_log", "cron_logs", "syslog", "utmp"],
+    "cloud_forensics": ["aws_cli", "azure_cli", "gcp_forensics", "o365_audit"],
+    "email_forensics": ["readpst", "mbox_parser", "eml_parser", "email_headers"]
+  },
+  "quick_reference": {
+    "evidence_acquisition": "Start with dd/ewfacquire for disk imaging, memdump for memory",
+    "initial_triage": "Run volatility for memory, evtxdump for logs, netstat for live connections",
+    "timeline_creation": "Use plaso/log2timeline to create super timelines from all artifacts",
+    "malware_detection": "Scan with yara rules, analyze with volatility, check persistence in registry",
+    "data_recovery": "Try photorec/scalpel for deleted files, check unallocated space",
+    "network_investigation": "Capture with tcpdump, analyze with wireshark, extract files with zeek",
+    "windows_forensics": "Parse registry (regripper), prefetch, event logs, shimcache",
+    "linux_forensics": "Check /var/log/, bash_history, cron jobs, auth attempts",
+    "mobile_forensics": "Use cellebrite/oxygen for full extraction, parse with ileapp/aleapp",
+    "browser_forensics": "Extract with hindsight, analyze history/cookies/downloads/autofill"
+  },
+  "common_workflows": {
+    "incident_response": [
+      "1. Acquire memory (volatility/memdump)",
+      "2. Check active connections (netstat)",
+      "3. Analyze processes for malware",
+      "4. Parse event logs (evtxdump)",
+      "5. Create timeline (plaso)",
+      "6. Acquire disk image (dd/ewfacquire)"
+    ],
+    "malware_investigation": [
+      "1. Scan with YARA rules",
+      "2. Analyze memory for code injection",
+      "3. Check registry Run keys",
+      "4. Parse shimcache/prefetch for execution",
+      "5. Analyze network connections",
+      "6. Extract C2 indicators"
+    ],
+    "data_exfiltration": [
+      "1. Analyze network captures (wireshark)",
+      "2. Check large file transfers",
+      "3. Parse browser history for uploads",
+      "4. Examine USB device history",
+      "5. Review cloud sync logs",
+      "6. Timeline file access events"
+    ],
+    "insider_threat": [
+      "1. Parse registry RecentDocs/ShellBags",
+      "2. Analyze browser history/downloads",
+      "3. Check USB device connections",
+      "4. Review email communications",
+      "5. Examine file access timeline",
+      "6. Analyze cloud storage activity"
+    ]
+  }
+}

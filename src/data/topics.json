@@ -1,0 +1,482 @@
+[
+  {
+    "id": "fundamentals",
+    "title": "Computer Forensics Fundamentals",
+    "summary": "Introduction to digital forensics principles, methodologies, and the forensic process.",
+    "prerequisites": [],
+    "difficulty": "beginner",
+    "keywords": ["digital forensics", "computer forensics", "forensic principles", "evidence handling", "chain of custody"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "What is Digital Forensics?",
+        "content": "Digital forensics is the scientific examination and analysis of digital devices and data for legal purposes. It involves identifying, preserving, analyzing, and presenting digital evidence in a manner that is legally admissible in court."
+      },
+      {
+        "heading": "Core Principles",
+        "content": "Key principles include: 1) Minimize data alteration, 2) Maintain chain of custody, 3) Document all actions, 4) Follow standard procedures, 5) Remain objective and unbiased."
+      },
+      {
+        "heading": "Types of Digital Forensics",
+        "content": "Computer forensics, mobile device forensics, network forensics, database forensics, and cloud forensics each require specialized tools and techniques."
+      },
+      {
+        "heading": "The Forensic Process",
+        "content": "The process typically includes: Identification → Preservation → Collection → Examination → Analysis → Presentation."
+      }
+    ]
+  },
+  {
+    "id": "investigation-process",
+    "title": "Investigation Process",
+    "summary": "Detailed methodology for conducting digital forensic investigations from scene arrival to courtroom presentation.",
+    "prerequisites": ["fundamentals"],
+    "difficulty": "intermediate",
+    "keywords": ["investigation", "methodology", "evidence collection", "analysis", "reporting"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "Initial Response",
+        "content": "Secure the scene, document everything, identify potential evidence sources, and establish chain of custody. Never rush - methodical documentation is critical."
+      },
+      {
+        "heading": "Evidence Identification",
+        "content": "Catalog all digital devices: computers, mobile phones, storage media, network equipment, IoT devices. Document their state (on/off), connections, and surrounding environment."
+      },
+      {
+        "heading": "Preservation Techniques",
+        "content": "For powered-on systems: photograph screen, check for encryption, consider live acquisition. For powered-off systems: document, photograph, and transport safely. Use Faraday bags for mobile devices."
+      },
+      {
+        "heading": "Chain of Custody",
+        "content": "Maintain detailed records of who handled evidence, when, where, and why. Use tamper-evident bags and seals. Every transfer must be documented with signatures and timestamps."
+      },
+      {
+        "heading": "Documentation Standards",
+        "content": "Use standardized forms, take comprehensive photographs, create detailed notes, record environmental conditions, and maintain time-stamped logs of all actions."
+      }
+    ]
+  },
+  {
+    "id": "hdd-internals",
+    "title": "Hard Disk Drive (HDD) Internals",
+    "summary": "Physical and logical structure of HDDs including platters, heads, tracks, sectors, and data recovery implications.",
+    "prerequisites": ["fundamentals"],
+    "difficulty": "intermediate",
+    "keywords": ["HDD", "hard drive", "platters", "sectors", "tracks", "magnetic storage", "disk geometry"],
+    "assets3D": ["hdd-animation"],
+    "sections": [
+      {
+        "heading": "Physical Components",
+        "content": "HDDs consist of spinning platters coated with magnetic material, read/write heads on actuator arms, spindle motor, and controller board. Typical rotation speeds: 5400, 7200, or 10000 RPM."
+      },
+      {
+        "heading": "Data Organization",
+        "content": "Data is organized in concentric circles called tracks. Tracks are divided into sectors (traditionally 512 bytes, now often 4096 bytes). A cylinder is the set of tracks at the same position across all platters."
+      },
+      {
+        "heading": "Addressing Methods",
+        "content": "CHS (Cylinder-Head-Sector) addressing was replaced by LBA (Logical Block Addressing). LBA provides a simple linear addressing scheme, hiding the physical geometry from the operating system."
+      },
+      {
+        "heading": "Forensic Considerations",
+        "content": "Understanding HDD geometry is crucial for: 1) Data carving and recovery, 2) Understanding file slack space, 3) Identifying hidden partitions, 4) Detecting anti-forensic techniques like wiping."
+      }
+    ]
+  },
+  {
+    "id": "ssd-internals",
+    "title": "Solid State Drive (SSD) Internals",
+    "summary": "NAND flash architecture, wear leveling, TRIM, garbage collection, and unique forensic challenges.",
+    "prerequisites": ["fundamentals", "hdd-internals"],
+    "difficulty": "advanced",
+    "keywords": ["SSD", "NAND flash", "wear leveling", "TRIM", "garbage collection", "flash memory"],
+    "assets3D": ["ssd-animation"],
+    "sections": [
+      {
+        "heading": "NAND Flash Architecture",
+        "content": "SSDs use NAND flash memory organized in pages (~4-16KB) and blocks (~256-512 pages). Data is written at page level but erased at block level, creating unique challenges."
+      },
+      {
+        "heading": "Wear Leveling",
+        "content": "Wear leveling distributes write operations across all blocks to prevent premature failure. This means data is not stored in predictable locations, complicating forensic recovery."
+      },
+      {
+        "heading": "TRIM Command",
+        "content": "TRIM informs the SSD which data blocks are no longer in use, allowing immediate erasure. This is catastrophic for forensics as deleted data may be irrecoverable within seconds."
+      },
+      {
+        "heading": "Garbage Collection",
+        "content": "Background process that consolidates valid data and erases invalid blocks. This happens unpredictably and can destroy evidence even when the drive is idle."
+      },
+      {
+        "heading": "Forensic Implications",
+        "content": "Key challenges: 1) Rapid data destruction via TRIM, 2) Unpredictable data locations, 3) Over-provisioning hides storage, 4) Encryption often default. Recommendation: Immediate write-blocking and live acquisition when possible."
+      }
+    ]
+  },
+  {
+    "id": "ntfs",
+    "title": "NTFS File System",
+    "summary": "Windows NT File System structure, Master File Table, alternate data streams, and forensic artifacts.",
+    "prerequisites": ["fundamentals", "hdd-internals"],
+    "difficulty": "intermediate",
+    "keywords": ["NTFS", "MFT", "Master File Table", "alternate data streams", "Windows", "journaling"],
+    "assets3D": ["ntfs-structure"],
+    "sections": [
+      {
+        "heading": "Master File Table (MFT)",
+        "content": "The MFT is the heart of NTFS, containing at least one entry for every file and folder. Entry #0 describes the MFT itself. Each entry is 1024 bytes and contains file attributes, timestamps, and data location."
+      },
+      {
+        "heading": "Key Timestamps",
+        "content": "NTFS stores MACB timestamps: Modified (content change), Accessed (read), Changed (MFT entry modified), Birth (creation). These are recorded in UTC and provide crucial timeline evidence."
+      },
+      {
+        "heading": "Alternate Data Streams (ADS)",
+        "content": "NTFS supports multiple data streams per file. Malware often hides in ADS as they're invisible to standard directory listings. Use 'dir /r' or forensic tools to enumerate ADS."
+      },
+      {
+        "heading": "$LogFile and Journaling",
+        "content": "NTFS maintains a transaction log ($LogFile) for crash recovery. Forensically valuable for: 1) Recovering recently deleted files, 2) Timeline reconstruction, 3) Identifying file operations that didn't complete."
+      },
+      {
+        "heading": "Forensic Artifacts",
+        "content": "Key artifacts include: $MFT (all file metadata), $LogFile (transactions), $UsnJrnl (change journal), $I30 index entries (directory listings including deleted entries), $Bitmap (cluster allocation)."
+      }
+    ]
+  },
+  {
+    "id": "fat32",
+    "title": "FAT32 File System",
+    "summary": "File Allocation Table structure, limitations, and recovery techniques for FAT32 volumes.",
+    "prerequisites": ["fundamentals"],
+    "difficulty": "beginner",
+    "keywords": ["FAT32", "File Allocation Table", "removable media", "legacy systems"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "FAT Structure",
+        "content": "FAT32 uses a table that maps clusters to files. Each entry points to the next cluster in the file chain, with special values for end-of-chain (0xFFFFFF) and bad clusters (0xFFFFF7)."
+      },
+      {
+        "heading": "Directory Entries",
+        "content": "Each file has a 32-byte directory entry containing: filename (8.3 format), attributes, timestamps, starting cluster, and file size. Long filenames use multiple entries."
+      },
+      {
+        "heading": "Limitations",
+        "content": "Maximum file size: 4GB - 1 byte. Maximum volume size: 2TB (theoretical 16TB). No built-in encryption or compression. Limited timestamps (2-second granularity)."
+      },
+      {
+        "heading": "Forensic Recovery",
+        "content": "Deleted files: First character of filename replaced with 0xE5, but FAT chain may survive. Can carve files using cluster chains or file headers. Common on USB drives, SD cards, and older systems."
+      }
+    ]
+  },
+  {
+    "id": "ext4",
+    "title": "EXT4 File System",
+    "summary": "Fourth Extended File System for Linux, extents, journaling, and forensic considerations.",
+    "prerequisites": ["fundamentals"],
+    "difficulty": "intermediate",
+    "keywords": ["EXT4", "Linux", "extents", "journaling", "inode"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "Inode Structure",
+        "content": "Each file is represented by an inode containing metadata: permissions, ownership, timestamps (atime, mtime, ctime, crtime), file size, and pointers to data blocks."
+      },
+      {
+        "heading": "Extents vs Blocks",
+        "content": "EXT4 uses extents (contiguous physical block ranges) instead of individual block mapping, improving large file performance. Extent tree can be up to 5 levels deep."
+      },
+      {
+        "heading": "Journaling Modes",
+        "content": "Journal: metadata only (default). Ordered: metadata + data order guarantee. Writeback: fastest but least safe. The journal can contain recoverable file fragments."
+      },
+      {
+        "heading": "Forensic Challenges",
+        "content": "EXT4 zeroes inode data on deletion by default, making recovery difficult. However: 1) Journal may contain data, 2) File carving still effective, 3) extundelete/ext4magic tools can help, 4) Timestamps in dentries may survive."
+      }
+    ]
+  },
+  {
+    "id": "apfs",
+    "title": "APFS - Apple File System",
+    "summary": "Modern macOS/iOS file system with space sharing, snapshots, clones, and encryption.",
+    "prerequisites": ["fundamentals"],
+    "difficulty": "advanced",
+    "keywords": ["APFS", "Apple", "macOS", "iOS", "snapshots", "encryption", "copy-on-write"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "Copy-on-Write Architecture",
+        "content": "APFS never overwrites data in place. File modifications create new blocks, with old blocks marked for deletion later. This can preserve evidence but complicates analysis."
+      },
+      {
+        "heading": "Space Sharing & Containers",
+        "content": "Multiple volumes share a common pool of storage (container). Space is allocated dynamically. A container can hold up to 100 volumes, each with its own encryption key."
+      },
+      {
+        "heading": "Snapshots & Clones",
+        "content": "Snapshots are read-only point-in-time states. Clones are writable copies that share data blocks until modified. Time Machine uses APFS snapshots. Forensically valuable for historical state reconstruction."
+      },
+      {
+        "heading": "Encryption Layers",
+        "content": "APFS supports: single-key (entire volume), multi-key (per-file keys), and FileVault (full volume). Encryption is deeply integrated and often enabled by default on modern devices."
+      },
+      {
+        "heading": "Forensic Implications",
+        "content": "Challenges: 1) Encryption often on by default, 2) Complex space-sharing obscures data locations, 3) Copy-on-write means deleted data may persist, 4) Snapshots can reveal historical evidence. Use specialized tools like APFS Parser."
+      }
+    ]
+  },
+  {
+    "id": "memory-forensics",
+    "title": "Memory Forensics",
+    "summary": "Analyzing volatile RAM contents to uncover running processes, network connections, encryption keys, and malware.",
+    "prerequisites": ["fundamentals"],
+    "difficulty": "advanced",
+    "keywords": ["memory forensics", "RAM analysis", "volatile data", "Volatility", "memory dump", "process analysis"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "Why Memory Forensics?",
+        "content": "Memory contains runtime state invisible to disk: active malware, decrypted data, passwords, network connections, and unpacked executables. Many modern threats exist only in memory (fileless malware)."
+      },
+      {
+        "heading": "Memory Acquisition",
+        "content": "Capture methods: DumpIt (Windows), LiME (Linux), OSXPmem (macOS), or FTK Imager. For live systems, acquire memory before pulling the plug. Use write-blockers for offline acquisition from hibernation files."
+      },
+      {
+        "heading": "Core Analysis Techniques",
+        "content": "Process listing (pslist, psscan), network connections (netscan), DLL analysis (dlllist), command history (cmdscan, consoles), registry hives (hivelist, printkey), and malware detection (malfind, apihooks)."
+      },
+      {
+        "heading": "Detecting Hidden Processes",
+        "content": "Rootkits hide processes by unlinking from kernel lists. Use psscan to scan physical memory for EPROCESS structures, comparing with pslist results to identify hidden processes. Also check for Direct Kernel Object Manipulation (DKOM)."
+      },
+      {
+        "heading": "Extracting Artifacts",
+        "content": "Dump suspicious processes (procdump), extract DLLs (dlldump), carve executables, dump registry keys, extract encryption keys, and recover command history. Use memdump for complete process memory space."
+      }
+    ]
+  },
+  {
+    "id": "network-forensics",
+    "title": "Network Forensics",
+    "summary": "Capturing and analyzing network traffic to investigate attacks, data exfiltration, and malicious communications.",
+    "prerequisites": ["fundamentals"],
+    "difficulty": "intermediate",
+    "keywords": ["network forensics", "packet analysis", "Wireshark", "PCAP", "protocol analysis", "traffic analysis"],
+    "assets3D": "network-packet-flow",
+    "sections": [
+      {
+        "heading": "Packet Capture Methods",
+        "content": "Use tcpdump/Wireshark for live capture, collect from network TAPs or SPAN ports, retrieve from firewalls/IDS, or analyze existing PCAP files. Always use promiscuous mode for comprehensive capture."
+      },
+      {
+        "heading": "Protocol Analysis",
+        "content": "Understand layered protocols: Ethernet → IP → TCP/UDP → Application (HTTP, DNS, SMB). Each layer provides context. Analyze handshakes, retransmissions, and anomalies for investigation clues."
+      },
+      {
+        "heading": "Display Filters",
+        "content": "Essential filters: ip.addr == x.x.x.x (specific IP), http.request.method == POST (HTTP methods), tcp.flags.syn == 1 (SYN packets), dns.qry.name contains 'malicious' (DNS queries). Combine with and/or logic."
+      },
+      {
+        "heading": "Following Streams",
+        "content": "Reconstruct conversations: Follow TCP Stream for complete sessions, Follow HTTP Stream for web traffic, Follow SSL Stream (if decrypted). Export objects to extract files transmitted over network."
+      },
+      {
+        "heading": "Detecting Exfiltration",
+        "content": "Look for: unusually large outbound transfers, data to unexpected IPs/domains, traffic to known malicious infrastructure, DNS tunneling (large TXT queries), base64-encoded POST data, or traffic during off-hours."
+      }
+    ]
+  },
+  {
+    "id": "windows-forensics",
+    "title": "Windows Forensics",
+    "summary": "Analyzing Windows-specific artifacts including registry, event logs, prefetch, and user activity traces.",
+    "prerequisites": ["fundamentals", "ntfs"],
+    "difficulty": "intermediate",
+    "keywords": ["Windows forensics", "registry", "event logs", "prefetch", "Windows artifacts", "user activity"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "Windows Registry",
+        "content": "Registry hives: SAM (user accounts), SYSTEM (system config), SOFTWARE (installed programs), NTUSER.DAT (user settings). Use RegRipper or Registry Explorer. Key artifacts: UserAssist (program execution), RecentDocs (recent files), typed URLs."
+      },
+      {
+        "heading": "Event Logs",
+        "content": "Critical logs: Security.evtx (logons/logoffs), System.evtx (system events), Application.evtx (app events). Key Event IDs: 4624 (logon), 4625 (failed logon), 4688 (process creation), 7045 (service installation). Parse with EvtxExplorer or Chainsaw."
+      },
+      {
+        "heading": "Prefetch Files",
+        "content": "Located in C:\\Windows\\Prefetch\\. Each .pf file tracks program execution: run count, last execution time, files accessed. Use PECmd or WinPrefetchView. Proves program execution even if deleted."
+      },
+      {
+        "heading": "Jump Lists & LNK Files",
+        "content": "Jump Lists: Recent documents per application (C:\\Users\\*\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\AutomaticDestinations\\). LNK files: Shortcuts containing target file path, timestamps, volume serial. Use JLECmd and LECmd."
+      },
+      {
+        "heading": "USB Forensics",
+        "content": "Registry keys: SYSTEM\\CurrentControlSet\\Enum\\USBSTOR (connected devices), SOFTWARE\\Microsoft\\Windows Portable Devices (friendly names). Extract device serial numbers, vendor/product IDs, and connection timestamps. Correlate with Setupapi.dev.log."
+      }
+    ]
+  },
+  {
+    "id": "linux-forensics",
+    "title": "Linux Forensics",
+    "summary": "Investigating Linux systems including log analysis, bash history, cron jobs, and rootkit detection.",
+    "prerequisites": ["fundamentals", "ext4"],
+    "difficulty": "intermediate",
+    "keywords": ["Linux forensics", "log analysis", "bash history", "cron", "rootkit", "Unix forensics"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "System Logs",
+        "content": "Key logs: /var/log/auth.log or secure (authentication), /var/log/syslog (system messages), /var/log/apache2/ (web server), /var/log/messages. Parse with grep, awk, or forensic tools. Check log rotation in /etc/logrotate.conf."
+      },
+      {
+        "heading": "Command History",
+        "content": "~/.bash_history contains executed commands (if HISTFILE not disabled). Check ~/.zsh_history, ~/.mysql_history for other shells/applications. Timestamps can be enabled with HISTTIMEFORMAT. Attackers often clear or disable."
+      },
+      {
+        "heading": "Persistence Mechanisms",
+        "content": "Check: cron jobs (/etc/crontab, /var/spool/cron/), systemd units (/etc/systemd/system/), init scripts (/etc/init.d/), .bashrc/.bash_profile (profile scripts), /etc/rc.local (boot scripts). Hidden entries indicate compromise."
+      },
+      {
+        "heading": "Rootkit Detection",
+        "content": "Use chkrootkit, rkhunter, or OSSEC. Check for: kernel module anomalies (lsmod, /proc/modules), hidden processes (compare ps with /proc/), replaced binaries (hash verification), network backdoors (netstat vs lsof)."
+      },
+      {
+        "heading": "File Analysis",
+        "content": "Examine /etc/passwd and /etc/shadow for unauthorized accounts. Check /tmp and /var/tmp for malicious scripts. Review ~/.ssh/authorized_keys for backdoor SSH keys. Use stat for MAC times, file for type identification."
+      }
+    ]
+  },
+  {
+    "id": "mobile-forensics",
+    "title": "Mobile Forensics",
+    "summary": "Extracting and analyzing data from smartphones and tablets, including iOS and Android devices.",
+    "prerequisites": ["fundamentals"],
+    "difficulty": "advanced",
+    "keywords": ["mobile forensics", "iOS", "Android", "smartphone", "app data", "mobile extraction"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "Extraction Methods",
+        "content": "Logical: App-level data via backup. File System: Direct file access (requires USB debugging or jailbreak). Physical: Complete bit-by-bit image (requires exploit or chip-off). Advanced Logical: iOS partial file system via exploit."
+      },
+      {
+        "heading": "iOS Forensics",
+        "content": "iTunes backup analysis (plist files, SQLite databases). Key databases: sms.db (messages), call_history.db (calls), AddressBook.sqlitedb (contacts), consolidated.db (location). Parse with AXIOM, iBackup Analyzer, or SQLite Browser."
+      },
+      {
+        "heading": "Android Forensics",
+        "content": "ADB debugging for logical extraction. Key locations: /data/data/ (app data), /sdcard/ (user files), /data/system/ (system data). Parse SQLite databases: mmssms.db (messages), contacts2.db (contacts), downloads.db (downloads)."
+      },
+      {
+        "heading": "App-Specific Artifacts",
+        "content": "WhatsApp: msgstore.db (chats), wa.db (contacts). Signal: signal.db (encrypted, requires key). Snapchat: tcspahn.db (chats). Instagram: direct.db (messages). Each app has unique database schema and storage location."
+      },
+      {
+        "heading": "Cloud Artifacts",
+        "content": "iCloud: Use cloud acquisition for Photos, Drive, Find My. Google: Extract via Takeout or cloud forensic tools. Social media: Download via platform APIs. Sync artifacts often contain more than device alone."
+      }
+    ]
+  },
+  {
+    "id": "malware-analysis",
+    "title": "Malware Analysis",
+    "summary": "Analyzing malicious software to understand behavior, capabilities, and attribution for forensic investigations.",
+    "prerequisites": ["fundamentals", "memory-forensics"],
+    "difficulty": "advanced",
+    "keywords": ["malware analysis", "reverse engineering", "dynamic analysis", "static analysis", "sandbox"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "Static Analysis",
+        "content": "Analyze without execution: file hashes, strings, PE headers, imports/exports, resources, embedded files. Use PEStudio, Detect It Easy, pestudio. Check VirusTotal for known malware signatures and sandbox reports."
+      },
+      {
+        "heading": "Dynamic Analysis",
+        "content": "Execute in controlled environment (VM or sandbox): monitor process creation, registry changes, file I/O, network connections. Use Process Monitor, Process Hacker, Regshot, Wireshark. Isolate network or use INetSim."
+      },
+      {
+        "heading": "Behavioral Indicators",
+        "content": "Common behaviors: process injection, hooking APIs, persistence mechanisms (registry run keys, scheduled tasks), C2 communication, keylogging, screenshot capture, data exfiltration. Document for IOC creation."
+      },
+      {
+        "heading": "Unpacking and Deobfuscation",
+        "content": "Malware often packed/obfuscated. Use automated unpackers (UPX, PE Explorer) or manual unpacking (debug in x64dbg, set breakpoint at OEP). For scripts, deobfuscate JavaScript/PowerShell with CyberChef or manual analysis."
+      },
+      {
+        "heading": "Attribution Artifacts",
+        "content": "Look for: compile timestamps, PDB paths, code strings (language, error messages), C2 infrastructure, TTPs matching known groups. Use YARA rules for signature matching. Cross-reference with threat intelligence."
+      }
+    ]
+  },
+  {
+    "id": "cloud-forensics",
+    "title": "Cloud Forensics",
+    "summary": "Investigating incidents in cloud environments including AWS, Azure, and SaaS platforms.",
+    "prerequisites": ["fundamentals", "network-forensics"],
+    "difficulty": "advanced",
+    "keywords": ["cloud forensics", "AWS", "Azure", "GCP", "SaaS", "CloudTrail", "cloud security"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "Unique Challenges",
+        "content": "Multi-tenancy, ephemeral resources, lack of physical access, jurisdiction issues, shared responsibility model, API-driven investigation, and dependency on provider cooperation. Traditional disk imaging often impossible."
+      },
+      {
+        "heading": "AWS Forensics",
+        "content": "Key sources: CloudTrail (API calls), VPC Flow Logs (network), S3 Access Logs (object access), GuardDuty (threat detection), Config (configuration changes). Use Athena for log analysis. Snapshot volumes before termination."
+      },
+      {
+        "heading": "Azure Forensics",
+        "content": "Activity Logs (resource operations), Azure AD Sign-in Logs (authentication), NSG Flow Logs (network), Storage Analytics (blob access), Azure Sentinel (SIEM). Create disk snapshots, analyze with Log Analytics."
+      },
+      {
+        "heading": "SaaS Application Forensics",
+        "content": "Office 365: Audit logs, mailbox traces, DLP alerts. G Suite: Admin logs, Drive activity, Gmail logs. Salesforce: Setup audit trail, event logs. Most SaaS platforms have limited retention (90-180 days) - collect early."
+      },
+      {
+        "heading": "Data Preservation",
+        "content": "Snapshot compute instances, preserve logs in external storage (S3 with object lock, Azure immutable storage), export logs before retention expiration, document ephemeral resources, maintain chain of custody for cloud artifacts."
+      }
+    ]
+  },
+  {
+    "id": "anti-forensics",
+    "title": "Anti-Forensics & Detection",
+    "summary": "Understanding techniques used to destroy, hide, or manipulate evidence and how to detect them.",
+    "prerequisites": ["fundamentals", "memory-forensics", "malware-analysis"],
+    "difficulty": "advanced",
+    "keywords": ["anti-forensics", "data destruction", "encryption", "steganography", "timestomping", "evidence tampering"],
+    "assets3D": null,
+    "sections": [
+      {
+        "heading": "Data Destruction",
+        "content": "Techniques: secure deletion (shred, SDelete), disk wiping (DBAN), partition deletion, overwriting. Detection: Look for wiping tool artifacts, check for unusual empty space patterns, analyze file system journals for deletion patterns."
+      },
+      {
+        "heading": "Encryption and Obfuscation",
+        "content": "Full disk encryption (BitLocker, FileVault), container encryption (TrueCrypt, VeraCrypt), file-level encryption. Countermeasures: Capture before shutdown, cold boot attacks, hibernation file analysis, memory acquisition for keys."
+      },
+      {
+        "heading": "Timestomping",
+        "content": "Modifying MACB timestamps using tools like TimeStomp. Detection: Compare file system timestamps with $MFT timestamps ($STANDARD_INFORMATION vs $FILE_NAME), check $LogFile, examine $UsnJrnl for anomalies."
+      },
+      {
+        "heading": "Artifact Deletion",
+        "content": "Clearing logs, browser history, registry keys, prefetch files, event logs. Detection: Check for cleared logs (Event 1102 - audit log cleared), timeline gaps, registry LastWrite timestamps on cleaned keys, shadow copies."
+      },
+      {
+        "heading": "Steganography and Covert Channels",
+        "content": "Hiding data in images, audio, video, or network protocols (ICMP, DNS tunneling). Detection: Statistical analysis, file size anomalies, entropy analysis, specialized stego detection tools (StegDetect, StegExpose)."
+      }
+    ]
+  }
+]
